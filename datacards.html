@@ -1,662 +1,714 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dynamic Database Cards</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <style>
-        /* === THEMES & VARIABLES === */
-        :root {
-            /* Light Theme Defaults */
-            --bg-body: #e5e5e5;
-            --bg-container: #f4f6f8;
-            --card-bg: #ffffff;
-            --primary-green: #216e25;
-            --primary-hover: #1b5c1f;
-            --text-main: #333333;
-            --text-secondary: #666666;
-            --input-bg: #f8f8f8;
-            --border-color: #eaeaea;
-            --danger-color: #e53935;
-            --edit-color: #1976d2;
-            --lock-color: #757575;
-            --locked-bg: #fafafa;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#166534">
+<title>DataCards Pro</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
-        [data-theme="dark"] {
-            /* Dark Theme Overrides */
-            --bg-body: #121212;
-            --bg-container: #1e1e1e;
-            --card-bg: #2d2d2d;
-            --primary-green: #4caf50;
-            --primary-hover: #388e3c;
-            --text-main: #f5f5f5;
-            --text-secondary: #aaaaaa;
-            --input-bg: #1a1a1a;
-            --border-color: #404040;
-            --danger-color: #ff5252;
-            --edit-color: #448aff;
-            --lock-color: #9e9e9e;
-            --locked-bg: #252525;
-            --shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
+<style>
+:root{
+    --bg:#f1f5f9;--surface:#ffffff;--surface-2:#f8fafc;--text:#0f172a;
+    --muted:#64748b;--border:#e2e8f0;--primary:#166534;--primary-2:#15803d;
+    --primary-soft:#dcfce7;--danger:#dc2626;--danger-soft:#fee2e2;
+    --blue:#2563eb;--blue-soft:#dbeafe;--amber:#d97706;--amber-soft:#fef3c7;
+    --shadow:0 8px 30px rgba(15,23,42,.07);--radius:16px;
+}
+[data-theme="dark"]{
+    --bg:#0b1220;--surface:#111827;--surface-2:#172033;--text:#f8fafc;
+    --muted:#94a3b8;--border:#263449;--primary:#4ade80;--primary-2:#22c55e;
+    --primary-soft:rgba(74,222,128,.12);--danger:#f87171;--danger-soft:rgba(248,113,113,.12);
+    --blue:#60a5fa;--blue-soft:rgba(96,165,250,.12);--amber:#fbbf24;--amber-soft:rgba(251,191,36,.12);
+    --shadow:0 10px 35px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+    min-height:100vh;background:var(--bg);color:var(--text);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+button,input,select{font:inherit}
+button{border:0}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(37,99,235,.25);outline-offset:2px}
+.app{width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:40px}
 
-        /* === GLOBAL STYLES === */
-        * {
-            box-sizing: border-box; margin: 0; padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-        }
+/* Header */
+.header{
+    position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:15px 20px;background:color-mix(in srgb,var(--surface) 92%,transparent);
+    backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-icon{
+    width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    color:white;display:grid;place-items:center;box-shadow:0 6px 16px rgba(22,101,52,.22)
+}
+.brand h1{font-size:18px;line-height:1.1}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.header-actions{display:flex;gap:8px}
+.icon-btn{
+    width:40px;height:40px;border-radius:11px;background:var(--surface-2);color:var(--text);
+    display:grid;place-items:center;cursor:pointer;border:1px solid var(--border);transition:.2s
+}
+.icon-btn:hover{transform:translateY(-1px);border-color:var(--primary);color:var(--primary)}
+.icon-btn .material-icons-outlined{font-size:20px}
 
-        body { 
-            background-color: var(--bg-body); 
-            display: flex; justify-content: center; 
-        }
+/* Main */
+.main{padding:20px}
+.hero{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:18px}
+.hero h2{font-size:25px}.hero p{color:var(--muted);font-size:13px;margin-top:5px}
+.primary-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--primary);
+    color:white;border-radius:11px;padding:11px 15px;font-weight:700;cursor:pointer;transition:.2s;
+    box-shadow:0 6px 15px rgba(22,101,52,.18)
+}
+.primary-btn:hover{background:var(--primary-2);transform:translateY(-1px)}
+.secondary-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--surface);
+    color:var(--text);border:1px solid var(--border);border-radius:11px;padding:10px 13px;font-weight:600;cursor:pointer
+}
 
-        .app-container {
-            width: 100%; max-width: 414px; 
-            background-color: var(--bg-container);
-            min-height: 100vh; position: relative; 
-            box-shadow: var(--shadow);
-            display: flex; flex-direction: column;
-            overflow-x: hidden;
-        }
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;
+    box-shadow:var(--shadow);display:flex;align-items:center;gap:12px
+}
+.stat-icon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--primary-soft);color:var(--primary)}
+.stat:nth-child(2) .stat-icon{background:var(--blue-soft);color:var(--blue)}
+.stat:nth-child(3) .stat-icon{background:var(--amber-soft);color:var(--amber)}
+.stat:nth-child(4) .stat-icon{background:var(--danger-soft);color:var(--danger)}
+.stat strong{font-size:20px;display:block}.stat span{font-size:11px;color:var(--muted)}
 
-        /* === HEADER & CONTROLS === */
-        .header {
-            background-color: var(--primary-green); color: white; display: flex;
-            align-items: center; justify-content: space-between; padding: 16px; 
-            font-size: 18px; font-weight: 600; position: sticky; top: 0; z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+/* Toolbar */
+.toolbar{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:12px;margin-bottom:18px
+}
+.toolbar-row{display:flex;gap:9px}
+.search{
+    flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface-2);
+    border:1px solid var(--border);border-radius:11px;padding:0 11px
+}
+.search .material-icons-outlined{color:var(--muted);font-size:20px}
+.search input{width:100%;height:42px;border:0;background:transparent;color:var(--text);outline:0}
+.select-wrap{display:flex;align-items:center;gap:5px;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:0 9px}
+.select-wrap select{height:42px;border:0;outline:0;background:transparent;color:var(--text);min-width:120px}
+.toolbar-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:10px}
+.result-count{font-size:12px;color:var(--muted)}
+.quick-actions{display:flex;gap:7px}
 
-        .header-actions { display: flex; gap: 12px; }
-        .header-btn {
-            background: rgba(255,255,255,0.2); border: none; color: white;
-            border-radius: 50%; width: 32px; height: 32px; display: flex;
-            align-items: center; justify-content: center; cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .header-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
+/* Form */
+.form-wrap{display:none;margin-bottom:18px}
+.form-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px
+}
+.form-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.form-title{display:flex;align-items:center;gap:9px}.form-title h3{font-size:17px}.form-title .material-icons-outlined{color:var(--primary)}
+.fields{display:flex;flex-direction:column;gap:9px}
+.field-row{display:grid;grid-template-columns:1fr 1.5fr 42px;gap:8px}
+.input{
+    width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+    border-radius:9px;padding:11px 12px;outline:0
+}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.remove-field{border-radius:9px;background:var(--danger-soft);color:var(--danger);cursor:pointer}
+.form-actions{display:flex;gap:9px;margin-top:13px}.form-actions>*{flex:1}
 
-        .main-content { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:16px;animation:appear .25s ease
+}
+.card.locked{border-color:var(--border);background:linear-gradient(135deg,var(--surface),var(--surface-2))}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.card-number{
+    display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--muted);
+    background:var(--surface-2);border:1px solid var(--border);padding:5px 8px;border-radius:20px
+}
+.badge{font-size:10px;font-weight:700;padding:5px 8px;border-radius:20px}
+.badge.locked{color:var(--amber);background:var(--amber-soft)}
+.badge.open{color:var(--primary);background:var(--primary-soft)}
+.info-row{
+    display:grid;grid-template-columns:minmax(80px,38%) 1fr;gap:10px;padding:10px 0;
+    border-bottom:1px dashed var(--border);font-size:13px
+}
+.info-row:last-child{border-bottom:0}
+.info-label{color:var(--muted);font-weight:700;word-break:break-word}
+.info-value{color:var(--text);word-break:break-word;line-height:1.45}
+.card-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--border);margin-top:10px;padding-top:11px}
+.action{
+    min-height:36px;border-radius:8px;background:var(--surface-2);color:var(--muted);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:700
+}
+.action:hover{color:var(--text);border-color:var(--border)}
+.action .material-icons-outlined{font-size:17px}
+.action.edit{color:var(--blue)}.action.delete{color:var(--danger)}.action.lock{color:var(--amber)}
+.action.copy{color:var(--primary)}
+.locked .action.edit,.locked .action.delete{opacity:.45}
 
-        .control-bar {
-            display: flex; flex-direction: row; align-items: center; gap: 8px; 
-            padding: 12px; background: var(--card-bg); border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
-        
-        .search-input-wrapper {
-            display: flex; align-items: center; background-color: var(--input-bg);
-            border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px;
-            flex: 1; min-width: 0;
-        }
-        
-        .search-input-wrapper input {
-            border: none; background: transparent; outline: none; width: 100%;
-            margin-left: 6px; font-size: 14px; color: var(--text-main);
-        }
-        
-        .filter-dropdown {
-            display: flex; align-items: center; background-color: var(--input-bg);
-            border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 6px; 
-            flex-shrink: 0;
-        }
-        
-        .filter-dropdown select {
-            border: none; background: transparent; outline: none; font-size: 14px;
-            color: var(--text-main); cursor: pointer; width: 75px; text-overflow: ellipsis;
-        }
-        
-        .btn-add-card {
-            background-color: var(--primary-green); color: white; border: none;
-            border-radius: 8px; padding: 8px 12px; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; gap: 4px; font-size: 14px;
-            font-weight: 500; flex-shrink: 0;
-        }
-        .btn-add-card:hover { background-color: var(--primary-hover); }
+/* Empty/loading */
+.empty{text-align:center;padding:55px 20px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius)}
+.empty .material-icons-outlined{font-size:52px;color:var(--muted);opacity:.5}.empty h3{margin:10px 0 5px}.empty p{color:var(--muted);font-size:13px}
+.loader{display:none;grid-template-columns:repeat(2,1fr);gap:14px}
+.skeleton{height:210px;border-radius:var(--radius);background:linear-gradient(90deg,var(--surface-2) 25%,var(--border) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:loading 1.3s infinite}
 
-        /* === CARDS === */
-        .card {
-            background-color: var(--card-bg); border-radius: 12px; padding: 16px;
-            box-shadow: var(--shadow); position: relative; 
-            animation: slideUp 0.3s ease forwards;
-            border: 1px solid transparent;
-        }
+/* Modal */
+.overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,6,23,.58);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px}
+.modal{width:100%;max-width:390px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 25px 70px rgba(0,0,0,.25);animation:appear .2s ease}
+.modal h3{margin-bottom:7px}.modal p{color:var(--muted);font-size:13px;line-height:1.5}
+.modal-actions{display:flex;gap:9px;margin-top:20px}.modal-actions button{flex:1}
 
-        .card.is-locked { 
-            background-color: var(--locked-bg); border: 1px solid var(--border-color); 
-        }
-        
-        .card-body { transition: max-height 0.3s ease, opacity 0.3s ease; }
-        
-        /* Compact Mode Logic */
-        [data-view="compact"] .card-body .info-row:not(:first-child) { display: none; }
-        [data-view="compact"] .card { padding: 12px 16px; }
+/* Toast */
+.toast-box{position:fixed;right:20px;bottom:20px;z-index:200;display:flex;flex-direction:column;gap:8px;max-width:min(380px,calc(100vw - 40px))}
+.toast{display:flex;align-items:center;gap:8px;background:#0f172a;color:white;padding:11px 14px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:13px;animation:toastIn .25s ease}
+.toast.success{background:#166534}.toast.error{background:#b91c1c}.toast.info{background:#1e3a8a}
 
-        .info-row { display: flex; margin-bottom: 12px; font-size: 14px; }
-        .info-row:last-of-type { margin-bottom: 0; }
-        .info-label { color: var(--text-secondary); width: 40%; font-weight: 500; }
-        .info-value { color: var(--text-main); width: 60%; line-height: 1.5; word-wrap: break-word; }
-        
-        .card-actions {
-            display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; 
-            border-top: 1px dashed var(--border-color);
-        }
-        
-        .btn-action {
-            flex: 1; padding: 8px 4px; border-radius: 6px; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; gap: 4px; font-size: 13px;
-            font-weight: 500; border: 1px solid transparent; background-color: transparent;
-        }
-        .btn-action:hover { background-color: var(--input-bg); }
-        
-        .btn-action .material-icons-outlined { font-size: 18px; }
-        .btn-edit { color: var(--edit-color); }
-        .btn-remove { color: var(--danger-color); }
-        .btn-lock { color: var(--lock-color); }
+/* Compact mode */
+[data-view="compact"] .cards{grid-template-columns:1fr}
+[data-view="compact"] .card{padding:12px}
+[data-view="compact"] .info-row:not(:first-of-type){display:none}
 
-        .card.is-locked .btn-edit, .card.is-locked .btn-remove {
-            opacity: 0.3; pointer-events: none; filter: grayscale(100%);
-        }
+/* Responsive */
+@media(max-width:800px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .cards,.loader{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+    .main{padding:14px}.header{padding:12px 14px}
+    .hero{align-items:stretch;flex-direction:column}.hero h2{font-size:22px}
+    .toolbar-row{flex-wrap:wrap}.search{width:100%;flex-basis:100%}.select-wrap{flex:1}
+    .select-wrap select{width:100%;min-width:0}.toolbar-row>.primary-btn{flex:1}
+    .field-row{grid-template-columns:1fr 1fr 40px}
+    .card-actions{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:390px){
+    .stats{gap:8px}.stat{padding:11px}.stat strong{font-size:18px}
+    .field-row{grid-template-columns:1fr}
+    .remove-field{height:38px}
+}
 
-        /* === FORM === */
-        #formCardWrapper { display: none; margin-bottom: 16px; }
-        .card-header {
-            font-size: 16px; font-weight: 600; color: var(--primary-green); margin-bottom: 16px;
-            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        
-        .dynamic-field-row { display: flex; gap: 8px; margin-bottom: 12px; }
-        .custom-input {
-            flex: 1; border: 1px solid var(--border-color); background-color: var(--input-bg);
-            padding: 10px 12px; border-radius: 6px; font-size: 14px; color: var(--text-main);
-            outline: none; width: 100%;
-        }
-        .custom-input:focus { border-color: var(--primary-green); box-shadow: 0 0 0 2px rgba(33, 110, 37, 0.2); }
-        
-        .btn-remove-row {
-            background-color: rgba(229, 57, 53, 0.1); color: var(--danger-color); border: none;
-            border-radius: 6px; width: 40px; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .btn-remove-row:hover { background-color: var(--danger-color); color: white; }
-        
-        .btn-add-field {
-            background-color: transparent; color: var(--primary-green);
-            border: 1px dashed var(--primary-green); width: 100%; padding: 12px;
-            font-size: 14px; border-radius: 8px; cursor: pointer; margin-bottom: 16px;
-            font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px;
-        }
-        .btn-add-field:hover { background-color: rgba(33, 110, 37, 0.05); }
-        
-        .btn-submit {
-            background-color: var(--primary-green); color: white; border: none;
-            width: 100%; padding: 14px; font-size: 16px; border-radius: 8px;
-            cursor: pointer; font-weight: 500; display: flex; justify-content: center; gap: 8px;
-        }
-        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
-
-        /* === CUSTOM UI COMPONENTS === */
-        /* Skeleton Loader */
-        .skeleton {
-            background: linear-gradient(90deg, var(--input-bg) 25%, var(--border-color) 50%, var(--input-bg) 75%);
-            background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 6px;
-        }
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .skeleton-card { height: 120px; width: 100%; margin-bottom: 16px; border-radius: 12px; }
-
-        /* Toast Notifications */
-        .toast-container {
-            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-            z-index: 1000; display: flex; flex-direction: column; gap: 8px;
-        }
-        .toast {
-            background-color: #323232; color: white; padding: 12px 20px;
-            border-radius: 30px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            animation: toastEnter 0.3s ease forwards, toastExit 0.3s ease 2.7s forwards;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .toast.error { background-color: var(--danger-color); }
-        .toast.success { background-color: var(--primary-green); }
-
-        /* Custom Modal */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); z-index: 1000; display: none;
-            align-items: center; justify-content: center; backdrop-filter: blur(3px);
-        }
-        .modal {
-            background: var(--card-bg); width: 90%; max-width: 320px; padding: 20px;
-            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            text-align: center; color: var(--text-main); animation: slideUp 0.2s ease;
-        }
-        .modal-buttons { display: flex; gap: 12px; margin-top: 20px; }
-        .modal-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; }
-        .btn-cancel { background: var(--input-bg); color: var(--text-main); }
-        .btn-confirm { background: var(--danger-color); color: white; }
-
-        /* Helpers */
-        .spinner { animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes toastEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes toastExit { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
-        .editing-badge { font-size: 11px; background: var(--edit-color); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
-
-    </style>
+/* Animations */
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
 </head>
+
 <body data-theme="light" data-view="expanded">
+<div class="app">
 
-<div class="app-container">
-    <header class="header">
-        <div class="header-title">DataCards</div>
-        <div class="header-actions">
-            <!-- View Mode Toggle -->
-            <button class="header-btn" onclick="toggleViewMode()" title="Toggle View">
-                <span class="material-icons-outlined" id="viewIcon">view_agenda</span>
-            </button>
-            <!-- Theme Toggle -->
-            <button class="header-btn" onclick="toggleTheme()" title="Toggle Theme">
-                <span class="material-icons-outlined" id="themeIcon">dark_mode</span>
-            </button>
-        </div>
-    </header>
+<header class="header">
+    <div class="brand">
+        <div class="brand-icon"><span class="material-icons-outlined">database</span></div>
+        <div><h1>DataCards</h1><small>Smart record manager</small></div>
+    </div>
+    <div class="header-actions">
+        <button class="icon-btn" onclick="refreshData()" title="Refresh"><span class="material-icons-outlined" id="refreshIcon">refresh</span></button>
+        <button class="icon-btn" onclick="toggleView()" title="Toggle view"><span class="material-icons-outlined" id="viewIcon">view_agenda</span></button>
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><span class="material-icons-outlined" id="themeIcon">dark_mode</span></button>
+    </div>
+</header>
 
-    <main class="main-content">
-        <div class="control-bar">
-            <div class="search-input-wrapper">
-                <span class="material-icons-outlined" style="color: var(--text-secondary); font-size: 18px;">search</span>
-                <input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="Search data...">
+<main class="main">
+    <section class="hero">
+        <div><h2>Your Database</h2><p>Create, search, edit and organize your records easily.</p></div>
+        <button class="primary-btn" onclick="openCreateForm()"><span class="material-icons-outlined">add</span>New Card</button>
+    </section>
+
+    <section class="stats">
+        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">style</span></div><div><strong id="statTotal">0</strong><span>Total Cards</span></div></div>
+        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">lock</span></div><div><strong id="statLocked">0</strong><span>Locked</span></div></div>
+        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">label</span></div><div><strong id="statFields">0</strong><span>Total Fields</span></div></div>
+        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">search</span></div><div><strong id="statVisible">0</strong><span>Visible</span></div></div>
+    </section>
+
+    <section class="toolbar">
+        <div class="toolbar-row">
+            <label class="search">
+                <span class="material-icons-outlined">search</span>
+                <input id="searchInput" type="search" placeholder="Search cards, labels or values..." oninput="applyFilters()">
+            </label>
+            <div class="select-wrap">
+                <span class="material-icons-outlined">filter_alt</span>
+                <select id="fieldFilter" onchange="applyFilters()"><option value="">All Fields</option></select>
             </div>
-            <div class="filter-dropdown">
-                <span class="material-icons-outlined" style="color: var(--text-secondary); font-size: 18px;">filter_alt</span>
-                <select id="fieldFilter" onchange="applyFilters()">
-                    <option value="">All</option>
-                </select>
-            </div>
-            <button class="btn-add-card" onclick="toggleAddForm()">
-                <span class="material-icons-outlined" style="font-size: 18px;">add</span> New
-            </button>
+            <button class="secondary-btn" onclick="clearFilters()" title="Clear filters"><span class="material-icons-outlined">filter_alt_off</span></button>
         </div>
+        <div class="toolbar-bottom">
+            <span class="result-count" id="resultCount">0 records</span>
+            <div class="quick-actions">
+                <button class="secondary-btn" onclick="exportJSON()"><span class="material-icons-outlined">download</span>Export</button>
+                <button class="secondary-btn" onclick="document.getElementById('importFile').click()"><span class="material-icons-outlined">upload</span>Import</button>
+                <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
+            </div>
+        </div>
+    </section>
 
-        <div id="formCardWrapper">
-            <div class="card">
-                <div class="card-header">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="material-icons-outlined" id="formIcon">post_add</span>
-                        <span id="formTitle">Create Card</span>
-                    </div>
-                    <span class="material-icons-outlined" style="cursor: pointer; color: var(--text-secondary);" onclick="toggleAddForm()">close</span>
+    <section class="form-wrap" id="formWrap">
+        <div class="form-card">
+            <div class="form-head">
+                <div class="form-title">
+                    <span class="material-icons-outlined" id="formIcon">post_add</span>
+                    <h3 id="formTitle">Create Card</h3>
                 </div>
-                <div id="fieldsContainer"></div>
-                <button class="btn-add-field" onclick="addFieldRow()">
-                    <span class="material-icons-outlined" style="font-size: 18px;">add_circle_outline</span> Add Field
-                </button>
-                <button class="btn-submit" id="submitBtn" onclick="saveCard()">
-                    <span class="material-icons-outlined" id="submitIcon">save</span> 
-                    <span id="submitText">Save Database</span>
-                </button>
+                <button class="icon-btn" onclick="closeForm()"><span class="material-icons-outlined">close</span></button>
+            </div>
+            <div class="fields" id="fieldsContainer"></div>
+            <button class="secondary-btn" style="width:100%;margin-top:10px;color:var(--primary);border-style:dashed" onclick="addFieldRow()">
+                <span class="material-icons-outlined">add_circle_outline</span>Add Field
+            </button>
+            <div class="form-actions">
+                <button class="secondary-btn" onclick="closeForm()">Cancel</button>
+                <button class="primary-btn" id="submitBtn" onclick="saveCard()"><span class="material-icons-outlined" id="submitIcon">save</span><span id="submitText">Save Card</span></button>
             </div>
         </div>
+    </section>
 
-        <div id="loader" style="display: none; flex-direction: column; gap: 16px;">
-            <div class="skeleton skeleton-card"></div>
-            <div class="skeleton skeleton-card"></div>
-            <div class="skeleton skeleton-card"></div>
-        </div>
+    <section class="loader" id="loader">
+        <div class="skeleton"></div><div class="skeleton"></div>
+        <div class="skeleton"></div><div class="skeleton"></div>
+    </section>
 
-        <div id="generatedCardsList" style="display: flex; flex-direction: column; gap: 16px;"></div>
-    </main>
+    <section class="cards" id="cards"></section>
+</main>
 
-    <!-- UI Overlays -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <div class="modal-overlay" id="confirmModal">
-        <div class="modal">
-            <h3 style="margin-bottom: 10px;">Delete Card?</h3>
-            <p style="font-size: 14px; color: var(--text-secondary);">This action cannot be undone. Are you sure?</p>
-            <div class="modal-buttons">
-                <button class="modal-btn btn-cancel" onclick="closeConfirmModal()">Cancel</button>
-                <button class="modal-btn btn-confirm" id="confirmActionBtn">Delete</button>
-            </div>
+<div class="overlay" id="confirmOverlay">
+    <div class="modal">
+        <h3 id="confirmTitle">Delete Card?</h3>
+        <p id="confirmText">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="secondary-btn" onclick="closeConfirm()">Cancel</button>
+            <button class="primary-btn" style="background:var(--danger)" id="confirmBtn">Delete</button>
         </div>
     </div>
 </div>
 
+<div class="overlay" id="detailOverlay">
+    <div class="modal" style="max-height:85vh;overflow:auto">
+        <div class="form-head"><div class="form-title"><span class="material-icons-outlined">visibility</span><h3>Card Details</h3></div><button class="icon-btn" onclick="closeDetail()"><span class="material-icons-outlined">close</span></button></div>
+        <div id="detailContent"></div>
+    </div>
+</div>
+
+<div class="toast-box" id="toastBox"></div>
+</div>
+
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzt8wTvmU-E1sbcmPB95z4HXWLKkiaQBjc-IukAehmmBgfkMyLZ5UhPvrUi-ct26tNhcA/exec"; 
-    
-    let appData = [];
-    let currentEditId = null;
+/* =========================================================
+   DataCards Pro
+   Google Apps Script API preserved from the original project
+   ========================================================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbzt8wTvmU-E1sbcmPB95z4HXWLKkiaQBjc-IukAehmmBgfkMyLZ5UhPvrUi-ct26tNhcA/exec";
 
-    // --- INIT & THEME MODES ---
-    window.onload = function() {
-        initThemeAndView();
-        if(API_URL.includes("YOUR_WEB_APP_URL")) {
-            showToast("Missing API URL in code.", "error");
-            return;
-        }
-        initEmptyForm();
-        fetchData();
-    };
+let appData = [];
+let currentEditId = null;
+let confirmCallback = null;
 
-    function initThemeAndView() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        const savedView = localStorage.getItem('view') || 'expanded';
-        
-        document.body.setAttribute('data-theme', savedTheme);
-        document.body.setAttribute('data-view', savedView);
-        
-        document.getElementById('themeIcon').innerText = savedTheme === 'dark' ? 'light_mode' : 'dark_mode';
-        document.getElementById('viewIcon').innerText = savedView === 'compact' ? 'format_list_bulleted' : 'view_agenda';
+/* ---------- Init ---------- */
+window.addEventListener("DOMContentLoaded", () => {
+    initPreferences();
+    initEmptyForm();
+    fetchData();
+});
+
+function initPreferences(){
+    const theme = localStorage.getItem("dc-theme") || "light";
+    const view = localStorage.getItem("dc-view") || "expanded";
+    document.body.dataset.theme = theme;
+    document.body.dataset.view = view;
+    updateThemeIcon();
+    updateViewIcon();
+}
+
+/* ---------- Theme / View ---------- */
+function toggleTheme(){
+    const next = document.body.dataset.theme === "dark" ? "light" : "dark";
+    document.body.dataset.theme = next;
+    localStorage.setItem("dc-theme", next);
+    updateThemeIcon();
+    showToast(next === "dark" ? "Dark mode enabled" : "Light mode enabled", "info");
+}
+function updateThemeIcon(){
+    document.getElementById("themeIcon").textContent =
+        document.body.dataset.theme === "dark" ? "light_mode" : "dark_mode";
+}
+function toggleView(){
+    const next = document.body.dataset.view === "compact" ? "expanded" : "compact";
+    document.body.dataset.view = next;
+    localStorage.setItem("dc-view", next);
+    updateViewIcon();
+}
+function updateViewIcon(){
+    document.getElementById("viewIcon").textContent =
+        document.body.dataset.view === "compact" ? "format_list_bulleted" : "view_agenda";
+}
+
+/* ---------- Helpers ---------- */
+function escapeHTML(value){
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[char]));
+}
+function safeId(value){ return String(value ?? "").replace(/[^a-zA-Z0-9_-]/g,""); }
+function showToast(message,type="info"){
+    const box=document.getElementById("toastBox");
+    const toast=document.createElement("div");
+    toast.className=`toast ${type}`;
+    const icon=type==="success"?"check_circle":type==="error"?"error_outline":"info";
+    toast.innerHTML=`<span class="material-icons-outlined">${icon}</span><span>${escapeHTML(message)}</span>`;
+    box.appendChild(toast);
+    setTimeout(()=>toast.remove(),3200);
+}
+
+/* ---------- Confirm ---------- */
+function openConfirm(title,text,callback){
+    document.getElementById("confirmTitle").textContent=title;
+    document.getElementById("confirmText").textContent=text;
+    confirmCallback=callback;
+    document.getElementById("confirmOverlay").style.display="flex";
+}
+function closeConfirm(){
+    document.getElementById("confirmOverlay").style.display="none";
+    confirmCallback=null;
+}
+document.getElementById("confirmBtn").addEventListener("click",async()=>{
+    if(confirmCallback){
+        const cb=confirmCallback;
+        closeConfirm();
+        await cb();
+    }
+});
+
+/* ---------- API ---------- */
+async function fetchData(){
+    if(!API_URL || API_URL.includes("YOUR_WEB_APP_URL")){
+        showToast("API URL is missing.","error"); return;
+    }
+    const loader=document.getElementById("loader");
+    const cards=document.getElementById("cards");
+    loader.style.display="grid";
+    cards.innerHTML="";
+    try{
+        const response=await fetch(API_URL,{cache:"no-store"});
+        if(!response.ok) throw new Error("HTTP "+response.status);
+        const result=await response.json();
+        if(!result.success) throw new Error(result.error || "Backend error");
+        appData=Array.isArray(result.cards)?result.cards:[];
+        normalizeData();
+        render();
+        showToast("Data refreshed","success");
+    }catch(error){
+        console.error(error);
+        showToast("Could not load data. Check your API connection.","error");
+        render();
+    }finally{
+        loader.style.display="none";
+    }
+}
+function refreshData(){
+    const icon=document.getElementById("refreshIcon");
+    icon.classList.add("spin");
+    fetchData().finally(()=>setTimeout(()=>icon.classList.remove("spin"),500));
+}
+function normalizeData(){
+    appData=appData.map(card=>({
+        id:card.id ?? crypto.randomUUID(),
+        locked:Boolean(card.locked),
+        cardData:Array.isArray(card.cardData)?card.cardData.map(f=>({
+            name:String(f?.name ?? "Untitled"),
+            value:String(f?.value ?? "-")
+        })):[]
+    }));
+}
+
+/* ---------- Render ---------- */
+function render(){
+    renderStats();
+    updateFilterDropdown();
+    renderCards();
+    applyFilters();
+}
+function renderStats(){
+    const total=appData.length;
+    const locked=appData.filter(c=>c.locked).length;
+    const fields=appData.reduce((sum,c)=>sum+c.cardData.length,0);
+    document.getElementById("statTotal").textContent=total;
+    document.getElementById("statLocked").textContent=locked;
+    document.getElementById("statFields").textContent=fields;
+}
+function renderCards(){
+    const container=document.getElementById("cards");
+    if(!appData.length){
+        container.innerHTML=`
+            <div class="empty" style="grid-column:1/-1">
+                <span class="material-icons-outlined">inventory_2</span>
+                <h3>No cards yet</h3>
+                <p>Create your first record to get started.</p>
+                <button class="primary-btn" style="margin-top:15px" onclick="openCreateForm()"><span class="material-icons-outlined">add</span>Create Card</button>
+            </div>`;
+        document.getElementById("resultCount").textContent="0 records";
+        return;
     }
 
-    function toggleTheme() {
-        const isDark = document.body.getAttribute('data-theme') === 'dark';
-        const newTheme = isDark ? 'light' : 'dark';
-        document.body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        document.getElementById('themeIcon').innerText = isDark ? 'dark_mode' : 'light_mode';
-        showToast(`${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} mode activated`);
-    }
+    container.innerHTML=appData.map((card,index)=>{
+        const locked=card.locked;
+        const rows=card.cardData.map(field=>`
+            <div class="info-row">
+                <div class="info-label">${escapeHTML(field.name)}</div>
+                <div class="info-value">${escapeHTML(field.value)}</div>
+            </div>`).join("");
 
-    function toggleViewMode() {
-        const isCompact = document.body.getAttribute('data-view') === 'compact';
-        const newView = isCompact ? 'expanded' : 'compact';
-        document.body.setAttribute('data-view', newView);
-        localStorage.setItem('view', newView);
-        document.getElementById('viewIcon').innerText = isCompact ? 'view_agenda' : 'format_list_bulleted';
-    }
+        return `
+        <article class="card ${locked?"locked":""}" data-id="${escapeHTML(card.id)}"
+                 data-search="${escapeHTML(JSON.stringify(card.cardData).toLowerCase())}">
+            <div class="card-top">
+                <span class="card-number"><span class="material-icons-outlined" style="font-size:15px">credit_card</span>Card ${index+1}</span>
+                <span class="badge ${locked?"locked":"open"}">
+                    ${locked?"🔒 Locked":"● Active"}
+                </span>
+            </div>
+            <div class="card-body">${rows || `<div class="info-row"><div class="info-value">No fields</div></div>`}</div>
+            <div class="card-actions">
+                <button class="action" onclick="viewCard('${safeId(card.id)}')"><span class="material-icons-outlined">visibility</span>View</button>
+                <button class="action copy" onclick="copyCard('${safeId(card.id)}')"><span class="material-icons-outlined">content_copy</span>Copy</button>
+                <button class="action lock" onclick="toggleLock('${safeId(card.id)}',${locked},this)"><span class="material-icons-outlined">${locked?"lock_open":"lock"}</span>${locked?"Unlock":"Lock"}</button>
+                <button class="action edit" onclick="editCard('${safeId(card.id)}')" ${locked?"disabled":""}><span class="material-icons-outlined">edit</span>Edit</button>
+                <button class="action delete" style="grid-column:span 4" onclick="deleteCard('${safeId(card.id)}',this)" ${locked?"disabled":""}><span class="material-icons-outlined">delete_outline</span>Remove</button>
+            </div>
+        </article>`;
+    }).join("");
+}
+function updateFilterDropdown(){
+    const select=document.getElementById("fieldFilter");
+    const previous=select.value;
+    const labels=[...new Set(appData.flatMap(c=>c.cardData.map(f=>f.name).filter(Boolean)))].sort((a,b)=>a.localeCompare(b));
+    select.innerHTML='<option value="">All Fields</option>'+labels.map(label=>`<option value="${escapeHTML(label)}">${escapeHTML(label)}</option>`).join("");
+    if(labels.includes(previous)) select.value=previous;
+}
 
-    // --- UI HELPERS ---
-    function showToast(message, type = 'info') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<span class="material-icons-outlined">${type === 'error' ? 'error_outline' : (type === 'success' ? 'check_circle' : 'info')}</span> ${message}`;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-    }
+/* ---------- Search / Filter ---------- */
+function applyFilters(){
+    const query=document.getElementById("searchInput").value.trim().toLowerCase();
+    const field=document.getElementById("fieldFilter").value;
+    const cards=[...document.querySelectorAll("#cards .card")];
+    let visible=0;
 
-    let confirmCallback = null;
-    function openConfirmModal(callback) {
-        confirmCallback = callback;
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-    function closeConfirmModal() {
-        document.getElementById('confirmModal').style.display = 'none';
-        confirmCallback = null;
-    }
-    document.getElementById('confirmActionBtn').addEventListener('click', () => {
-        if(confirmCallback) confirmCallback();
-        closeConfirmModal();
+    cards.forEach(el=>{
+        const id=el.dataset.id;
+        const card=appData.find(c=>String(c.id)===String(id));
+        if(!card)return;
+        const searchMatch=!query || JSON.stringify(card.cardData).toLowerCase().includes(query);
+        const fieldMatch=!field || card.cardData.some(f=>f.name===field);
+        const show=searchMatch && fieldMatch;
+        el.style.display=show?"block":"none";
+        if(show)visible++;
     });
+    document.getElementById("statVisible").textContent=visible;
+    document.getElementById("resultCount").textContent=`${visible} record${visible===1?"":"s"}`;
+}
+function clearFilters(){
+    document.getElementById("searchInput").value="";
+    document.getElementById("fieldFilter").value="";
+    applyFilters();
+}
 
-    // --- CORE LOGIC ---
-    async function fetchData() {
-        document.getElementById('loader').style.display = 'flex';
-        document.getElementById('generatedCardsList').innerHTML = '';
-        
-        try {
-            const response = await fetch(API_URL);
-            const result = await response.json();
-            if (result.success) {
-                appData = result.cards;
-                renderCards();
-            } else {
-                showToast("Backend Error: " + (result.error || "Unknown"), "error");
-            }
-        } catch (error) {
-            showToast("Network Error: Could not reach server.", "error");
-        } finally {
-            document.getElementById('loader').style.display = 'none';
-        }
+/* ---------- Form ---------- */
+function openCreateForm(){
+    currentEditId=null;
+    document.getElementById("formTitle").textContent="Create Card";
+    document.getElementById("formIcon").textContent="post_add";
+    document.getElementById("submitText").textContent="Save Card";
+    document.getElementById("fieldsContainer").innerHTML="";
+    addFieldRow();
+    document.getElementById("formWrap").style.display="block";
+    document.getElementById("formWrap").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function closeForm(){
+    document.getElementById("formWrap").style.display="none";
+    currentEditId=null;
+}
+function initEmptyForm(){
+    document.getElementById("fieldsContainer").innerHTML="";
+    addFieldRow();
+}
+function addFieldRow(name="",value=""){
+    const row=document.createElement("div");
+    row.className="field-row";
+    row.innerHTML=`
+        <input class="input field-name" type="text" placeholder="Label (e.g. Email)" value="${escapeHTML(name)}">
+        <input class="input field-value" type="text" placeholder="Value (e.g. example@email.com)" value="${escapeHTML(value)}">
+        <button class="remove-field" type="button" title="Remove field"><span class="material-icons-outlined">close</span></button>`;
+    row.querySelector(".remove-field").onclick=()=>row.remove();
+    document.getElementById("fieldsContainer").appendChild(row);
+}
+function editCard(id){
+    const card=appData.find(c=>String(c.id)===String(id));
+    if(!card)return;
+    if(card.locked){showToast("Unlock the card before editing.","error");return;}
+    currentEditId=card.id;
+    document.getElementById("formTitle").textContent="Edit Card";
+    document.getElementById("formIcon").textContent="edit_note";
+    document.getElementById("submitText").textContent="Update Card";
+    const container=document.getElementById("fieldsContainer");
+    container.innerHTML="";
+    card.cardData.forEach(f=>addFieldRow(f.name,f.value));
+    if(!card.cardData.length)addFieldRow();
+    document.getElementById("formWrap").style.display="block";
+    document.getElementById("formWrap").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function saveCard(){
+    const rows=[...document.querySelectorAll("#fieldsContainer .field-row")];
+    const cardData=rows.map(row=>({
+        name:row.querySelector(".field-name").value.trim() || "Untitled",
+        value:row.querySelector(".field-value").value.trim() || "-"
+    })).filter(f=>f.name!=="Untitled" || f.value!=="-");
+
+    if(!cardData.length){
+        showToast("Enter at least one field.","error");return;
     }
 
-    async function saveCard() {
-        const rows = document.querySelectorAll('#fieldsContainer .dynamic-field-row');
-        let cardData = [];
-        
-        rows.forEach(row => {
-            const name = row.querySelector('.field-name').value.trim();
-            const value = row.querySelector('.field-value').value.trim();
-            if (name || value) cardData.push({ name: name || 'Untitled', value: value || '-' });
+    const button=document.getElementById("submitBtn");
+    const icon=document.getElementById("submitIcon");
+    button.disabled=true;icon.textContent="sync";icon.classList.add("spin");
+
+    const payload={action:currentEditId?"update":"create",cardData,id:currentEditId};
+    try{
+        const response=await fetch(API_URL,{
+            method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)
         });
+        const result=await response.json();
+        if(!result.success)throw new Error(result.error||"Save failed");
 
-        if (cardData.length === 0) return showToast("Please enter at least one field.", "error");
+        if(currentEditId){
+            const i=appData.findIndex(c=>String(c.id)===String(currentEditId));
+            if(i>=0)appData[i].cardData=cardData;
+            showToast("Card updated successfully","success");
+        }else{
+            appData.push({id:result.id,cardData,locked:false});
+            showToast("Card created successfully","success");
+        }
+        closeForm();render();
+    }catch(error){
+        console.error(error);showToast(error.message||"Could not save card","error");
+    }finally{
+        button.disabled=false;icon.textContent="save";icon.classList.remove("spin");
+    }
+}
 
-        const submitBtn = document.getElementById('submitBtn');
-        const submitIcon = document.getElementById('submitIcon');
-        
-        submitBtn.disabled = true;
-        submitIcon.classList.add('spinner');
-        submitIcon.innerText = "sync";
+/* ---------- Card Actions ---------- */
+function findCard(id){return appData.find(c=>String(c.id)===String(id));}
 
-        const payload = { action: currentEditId ? 'update' : 'create', cardData: cardData, id: currentEditId };
+async function deleteCard(id,button){
+    const card=findCard(id);
+    if(!card)return;
+    if(card.locked){showToast("Unlock the card before removing it.","error");return;}
 
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload)
+    openConfirm("Delete Card?","This record will be permanently removed from the database.",async()=>{
+        const original=button.innerHTML;
+        button.disabled=true;button.innerHTML='<span class="material-icons-outlined spin">sync</span>';
+        try{
+            const response=await fetch(API_URL,{
+                method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+                body:JSON.stringify({action:"delete",id})
             });
-            const result = await response.json();
-            
-            if (result.success) {
-                if(currentEditId) {
-                    const index = appData.findIndex(c => c.id === currentEditId);
-                    if(index !== -1) appData[index].cardData = cardData;
-                    showToast("Card updated successfully!", "success");
-                } else {
-                    appData.push({ id: result.id, cardData: cardData, locked: false });
-                    showToast("Card created successfully!", "success");
-                }
-                toggleAddForm(); 
-                renderCards();
-            } else {
-                showToast("Save Failed: " + result.error, "error");
-            }
-        } catch (error) {
-            showToast("Network Error: Could not save data.", "error");
-        } finally {
-            submitBtn.disabled = false;
-            submitIcon.classList.remove('spinner');
-            submitIcon.innerText = "save";
+            const result=await response.json();
+            if(!result.success)throw new Error(result.error||"Delete failed");
+            appData=appData.filter(c=>String(c.id)!==String(id));
+            render();showToast("Card deleted","success");
+        }catch(error){
+            button.disabled=false;button.innerHTML=original;
+            showToast(error.message||"Could not delete card","error");
         }
-    }
+    });
+}
 
-    function triggerDeleteCard(id, btnElement) {
-        openConfirmModal(async () => {
-            const originalHtml = btnElement.innerHTML;
-            btnElement.innerHTML = '<span class="material-icons-outlined spinner">sync</span>';
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'delete', id: id })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    appData = appData.filter(card => card.id !== id);
-                    renderCards();
-                    showToast("Card deleted", "success");
-                } else {
-                    showToast("Delete failed", "error");
-                    btnElement.innerHTML = originalHtml;
-                }
-            } catch (error) {
-                showToast("Network Error", "error");
-                btnElement.innerHTML = originalHtml;
-            }
+async function toggleLock(id,current,button){
+    const newState=!current;
+    const original=button.innerHTML;
+    button.disabled=true;button.innerHTML='<span class="material-icons-outlined spin">sync</span>';
+    try{
+        const response=await fetch(API_URL,{
+            method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+            body:JSON.stringify({action:"update",id,locked:newState})
         });
+        const result=await response.json();
+        if(!result.success)throw new Error(result.error||"Lock update failed");
+        const card=findCard(id);
+        if(card)card.locked=newState;
+        render();showToast(newState?"Card locked":"Card unlocked","success");
+    }catch(error){
+        button.disabled=false;button.innerHTML=original;
+        showToast(error.message||"Could not update lock","error");
     }
+}
 
-    async function lockCard(id, currentLockState, btnElement) {
-        const newLockState = !currentLockState;
-        const originalHtml = btnElement.innerHTML;
-        btnElement.innerHTML = '<span class="material-icons-outlined spinner">sync</span>';
-        
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'update', id: id, locked: newLockState })
-            });
-            const result = await response.json();
-            
-            if (result.success) {
-                const index = appData.findIndex(c => c.id === id);
-                if(index !== -1) appData[index].locked = newLockState;
-                renderCards(); 
-                showToast(newLockState ? "Card Locked" : "Card Unlocked");
-            } else {
-                showToast("Lock update failed", "error");
-                btnElement.innerHTML = originalHtml;
-            }
-        } catch (error) {
-            showToast("Network Error", "error");
-            btnElement.innerHTML = originalHtml;
-        }
+function viewCard(id){
+    const card=findCard(id);
+    if(!card)return;
+    document.getElementById("detailContent").innerHTML=card.cardData.map(f=>`
+        <div class="info-row"><div class="info-label">${escapeHTML(f.name)}</div><div class="info-value">${escapeHTML(f.value)}</div></div>
+    `).join("") || "<p>No fields available.</p>";
+    document.getElementById("detailOverlay").style.display="flex";
+}
+function closeDetail(){document.getElementById("detailOverlay").style.display="none"}
+
+async function copyCard(id){
+    const card=findCard(id);
+    if(!card)return;
+    const text=card.cardData.map(f=>`${f.name}: ${f.value}`).join("\n");
+    try{
+        await navigator.clipboard.writeText(text);
+        showToast("Card copied to clipboard","success");
+    }catch{
+        showToast("Clipboard permission was denied","error");
     }
+}
 
-    function renderCards() {
-        const container = document.getElementById('generatedCardsList');
-        container.innerHTML = '';
-        
-        if (appData.length === 0) {
-            container.innerHTML = `
-                <div style="text-align:center; color:var(--text-secondary); padding: 40px 20px;">
-                    <span class="material-icons-outlined" style="font-size: 48px; opacity: 0.5; margin-bottom: 10px; display:block;">inventory_2</span>
-                    No cards found. Create your first record!
-                </div>`;
-        }
+/* ---------- Export / Import ---------- */
+function exportJSON(){
+    if(!appData.length){showToast("There is no data to export.","info");return;}
+    const blob=new Blob([JSON.stringify(appData,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;a.download=`datacards-backup-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    showToast("Backup exported","success");
+}
+function importJSON(event){
+    const file=event.target.files?.[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+        try{
+            const data=JSON.parse(reader.result);
+            if(!Array.isArray(data))throw new Error("Invalid backup format");
+            const valid=data.every(c=>c && Array.isArray(c.cardData));
+            if(!valid)throw new Error("Backup contains invalid records");
+            appData=data.map(c=>({
+                id:c.id ?? crypto.randomUUID(),locked:Boolean(c.locked),
+                cardData:c.cardData.map(f=>({name:String(f.name??"Untitled"),value:String(f.value??"-")}))
+            }));
+            render();
+            showToast("Backup loaded locally. Save records to sync with your server.","success");
+        }catch(error){showToast(error.message||"Invalid JSON backup","error")}
+        event.target.value="";
+    };
+    reader.readAsText(file);
+}
 
-        appData.forEach(card => {
-            const isLocked = card.locked;
-            let rowsHtml = '';
-            
-            card.cardData.forEach(field => {
-                rowsHtml += `
-                <div class="info-row">
-                    <div class="info-label">${field.name}</div>
-                    <div class="info-value">${field.value}</div>
-                </div>`;
-            });
-
-            const cardEl = document.createElement('div');
-            cardEl.className = `card ${isLocked ? 'is-locked' : ''}`;
-            cardEl.setAttribute('data-search', JSON.stringify(card.cardData).toLowerCase()); 
-            
-            cardEl.innerHTML = `
-                <div class="card-body">${rowsHtml}</div>
-                <div class="card-actions">
-                    <button class="btn-action btn-lock" onclick="lockCard('${card.id}', ${isLocked}, this)">
-                        <span class="material-icons-outlined">${isLocked ? 'lock' : 'lock_open'}</span> 
-                        ${isLocked ? 'Locked' : 'Lock'}
-                    </button>
-                    <button class="btn-action btn-edit" onclick="triggerEdit('${card.id}')">
-                        <span class="material-icons-outlined">edit</span> Edit
-                    </button>
-                    <button class="btn-action btn-remove" onclick="triggerDeleteCard('${card.id}', this)">
-                        <span class="material-icons-outlined">delete_outline</span> Remove
-                    </button>
-                </div>
-            `;
-            container.appendChild(cardEl);
-        });
-
-        updateFilterDropdown();
-        applyFilters();
+/* ---------- Keyboard UX ---------- */
+document.addEventListener("keydown",e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){
+        e.preventDefault();document.getElementById("searchInput").focus();
     }
-
-    // --- FORM MANAGMENT ---
-    function triggerEdit(id) {
-        const card = appData.find(c => c.id === id);
-        if (!card) return;
-        currentEditId = id;
-        document.getElementById('formTitle').innerHTML = 'Edit Card <span class="editing-badge">Editing</span>';
-        document.getElementById('formIcon').innerText = 'edit_note';
-        document.getElementById('submitText').innerText = 'Update Database';
-        
-        const container = document.getElementById('fieldsContainer');
-        container.innerHTML = '';
-        card.cardData.forEach(field => addFieldRow(field.name, field.value));
-
-        document.getElementById('formCardWrapper').style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    if(e.key==="Escape"){
+        closeConfirm();closeDetail();
     }
-
-    function toggleAddForm() {
-        const form = document.getElementById('formCardWrapper');
-        if (form.style.display === 'block') {
-            form.style.display = 'none';
-        } else {
-            currentEditId = null;
-            document.getElementById('formTitle').innerText = 'Create Card';
-            document.getElementById('formIcon').innerText = 'post_add';
-            document.getElementById('submitText').innerText = 'Save Database';
-            initEmptyForm();
-            form.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }
-
-    function initEmptyForm() {
-        document.getElementById('fieldsContainer').innerHTML = '';
-        addFieldRow();
-    }
-
-    function addFieldRow(name = '', value = '') {
-        const container = document.getElementById('fieldsContainer');
-        const newRow = document.createElement('div');
-        newRow.className = 'dynamic-field-row';
-        newRow.innerHTML = `
-            <input type="text" class="custom-input field-name" placeholder="Label (e.g. Email)" value="${name}">
-            <input type="text" class="custom-input field-value" placeholder="Value (e.g. test@me.com)" value="${value}">
-            <button class="btn-remove-row" onclick="this.parentElement.remove()">
-                <span class="material-icons-outlined" style="font-size: 18px;">close</span>
-            </button>
-        `;
-        container.appendChild(newRow);
-    }
-
-    // --- FILTERS ---
-    function updateFilterDropdown() {
-        const filterSelect = document.getElementById('fieldFilter');
-        const currentSelection = filterSelect.value;
-        const uniqueLabels = new Set();
-        
-        appData.forEach(card => card.cardData.forEach(field => { if(field.name) uniqueLabels.add(field.name); }));
-        filterSelect.innerHTML = '<option value="">All Fields</option>';
-        uniqueLabels.forEach(label => {
-            const option = document.createElement('option');
-            option.value = label; option.textContent = label;
-            filterSelect.appendChild(option);
-        });
-        if (uniqueLabels.has(currentSelection)) filterSelect.value = currentSelection;
-    }
-
-    function applyFilters() {
-        const searchText = document.getElementById('searchInput').value.toLowerCase();
-        const filterField = document.getElementById('fieldFilter').value;
-        const cardsElements = document.querySelectorAll('#generatedCardsList .card');
-
-        cardsElements.forEach(cardEl => {
-            let textMatch = cardEl.getAttribute('data-search').includes(searchText);
-            let fieldMatch = filterField === ""; 
-            if (filterField !== "") {
-                cardEl.querySelectorAll('.info-label').forEach(label => {
-                    if (label.innerText === filterField) fieldMatch = true;
-                });
-            }
-            cardEl.style.display = (textMatch && fieldMatch) ? 'block' : 'none';
-        });
-    }
+});
 </script>
 </body>
 </html>
