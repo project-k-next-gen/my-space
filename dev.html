@@ -3,245 +3,1461 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
 <title>CodeSpace</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
+
 :root{
---bg:#090b0f;
---panel:#0e1117;
---panel2:#12161d;
---editor:#0a0d12;
---border:#242a33;
---border2:#343c48;
---text:#e7edf4;
---muted:#7d8794;
---accent:#3b82f6;
---danger:#ef4444;
---success:#22c55e
+  --bg:#080b10;
+  --panel:#0d1118;
+  --panel2:#111720;
+  --panel3:#151c26;
+  --editor:#080b10;
+  --border:#202833;
+  --border2:#303b49;
+  --text:#edf3f9;
+  --muted:#7e8a99;
+  --muted2:#566171;
+  --accent:#3b82f6;
+  --accent2:#60a5fa;
+  --success:#22c55e;
+  --danger:#ef4444;
+  --warning:#f59e0b;
+  --shadow:0 20px 70px #000b;
+  --radius:8px
 }
-html,body{width:100%;height:100%;overflow:hidden}
-body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.app{height:100vh;display:flex}
-.sidebar{width:255px;min-width:255px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column}
-.brand{height:58px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px}
-.brandMark{width:30px;height:30px;border-radius:8px;background:var(--accent);display:grid;place-items:center;font-size:11px;font-weight:800}
-.brandName{font-size:15px;font-weight:700}
-.sideHeader{height:44px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.08em}
-.add{width:27px;height:27px;border:0;border-radius:6px;background:transparent;color:var(--muted);font-size:19px}
-.add:hover{background:#202630;color:#fff}
-.list{padding:0 7px;overflow:auto}
-.item{height:34px;padding:0 9px;border-radius:6px;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;cursor:pointer;user-select:none}
-.item:hover{background:#191e26;color:#fff}
-.item.active{background:#3b82f615;color:#79b8ff}
-.itemIcon{width:16px;text-align:center}
-.emptySide{padding:20px 12px;color:#555f6d;font-size:11px;text-align:center;line-height:1.6}
-.sidebarBottom{margin-top:auto;border-top:1px solid var(--border);padding:7px}
-.sideButton{height:34px;padding:0 9px;border-radius:6px;color:var(--muted);display:flex;align-items:center;gap:9px;font-size:11px;cursor:pointer}
-.sideButton:hover{background:#191e26;color:#fff}
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
-.topbar{height:58px;min-height:58px;border-bottom:1px solid var(--border);background:var(--panel);display:flex;align-items:center;justify-content:space-between;padding:0 12px}
-.left{display:flex;align-items:center;gap:10px;min-width:0}
-.menu{display:none;width:31px;height:31px;border:1px solid var(--border);background:#171c24;color:var(--muted);border-radius:6px}
-.path{font-size:12px;display:flex;gap:8px;min-width:0;overflow:hidden}
-.pathProject{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pathFile{color:var(--text);font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.actions{display:flex;gap:6px}
-.btn{height:32px;padding:0 11px;border:1px solid var(--border2);border-radius:6px;background:#181e26;color:var(--text);font-size:11px}
-.btn:hover{background:#232a34}
-.save{background:var(--success);border-color:var(--success);color:#fff}
-.run{background:var(--accent);border-color:var(--accent);color:#fff}
-.danger{background:#ef444415;border-color:#ef444455;color:#ff7770}
-.workspace{flex:1;min-height:0;display:flex}
-.editorPanel{width:55%;min-width:300px;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--editor)}
-.tabs{height:40px;min-height:40px;background:var(--panel2);border-bottom:1px solid var(--border);display:flex;overflow:auto}
-.tab{height:40px;padding:0 13px;border:0;border-right:1px solid var(--border);background:transparent;color:var(--muted);font:11px monospace;white-space:nowrap}
-.tab:hover{background:#191e26;color:#fff}
-.tab.active{background:var(--editor);color:#fff;box-shadow:inset 0 2px var(--accent)}
-.editor{flex:1;min-height:0;display:flex}
-.lines{width:50px;min-width:50px;padding:13px 9px 13px 0;color:#434b56;text-align:right;font:12px/1.65 monospace;overflow:hidden;user-select:none}
-#code{flex:1;width:100%;height:100%;border:0;outline:0;resize:none;background:var(--editor);color:#d4dbe3;padding:13px 15px;font:12px/1.65 Consolas,monospace;white-space:pre;overflow:auto;tab-size:2}
-.resizer{width:5px;cursor:col-resize;background:transparent}
-.resizer:hover{background:var(--accent)}
-.preview{flex:1;min-width:250px;display:flex;flex-direction:column;background:#fff}
-.previewHead{height:40px;min-height:40px;background:var(--panel2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;color:var(--muted);font-size:10px;font-weight:700}
-.previewActions{display:flex;gap:3px}
-.previewActions button{border:0;background:transparent;color:var(--muted);height:27px;padding:0 8px;border-radius:5px;font-size:10px}
-.previewActions button:hover{background:#202630;color:#fff}
-.previewBody{flex:1;min-height:0;display:flex;justify-content:center;background:#e5e7eb;overflow:auto}
-#preview{border:0;background:#fff;width:100%;height:100%}
-.status{height:26px;min-height:26px;border-top:1px solid var(--border);background:var(--panel);display:flex;align-items:center;justify-content:space-between;padding:0 10px;color:var(--muted);font-size:9px}
-.statusDot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--success);margin-right:5px}
-.modalLayer,.menuLayer{position:fixed;inset:0;background:#0009;backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50}
-.modalLayer.show,.menuLayer.show{display:flex}
-.modal{width:min(400px,calc(100% - 30px));background:#151a21;border:1px solid var(--border2);border-radius:10px;box-shadow:0 25px 80px #000b;padding:19px}
-.modal h2{font-size:15px}
-.modal p{font-size:10px;color:var(--muted);margin:5px 0 14px}
-.input{width:100%;height:39px;background:#0b0e13;border:1px solid var(--border2);border-radius:6px;color:#fff;padding:0 10px;font-size:12px;outline:0}
-.input:focus{border-color:var(--accent)}
-.modalButtons{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}
-.context{position:absolute;width:175px;background:#151a21;border:1px solid var(--border2);border-radius:7px;padding:5px;box-shadow:0 15px 45px #0009}
-.contextItem{height:32px;border-radius:5px;display:flex;align-items:center;padding:0 9px;color:#aab2bd;font-size:11px}
-.contextItem:hover{background:#232a34;color:#fff}
-.contextItem.delete:hover{background:#ef444415;color:#ff7770}
-.centerEmpty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:var(--muted)}
-.centerIcon{width:52px;height:52px;border:1px solid var(--border2);border-radius:14px;display:grid;place-items:center;font-size:20px;margin-bottom:14px;background:#11161d}
-.centerEmpty h2{font-size:15px;color:var(--text);font-weight:650}
-.centerEmpty p{font-size:11px;margin-top:6px;max-width:280px;line-height:1.6}
-.centerAction{margin-top:15px;height:34px;padding:0 13px;background:var(--accent);border:1px solid var(--accent);border-radius:6px;color:#fff;font-size:11px}
-.settings{position:fixed;right:0;top:0;height:100%;width:330px;background:#11161d;border-left:1px solid var(--border);z-index:60;transform:translateX(100%);transition:.2s}
-.settings.open{transform:translateX(0)}
-.settingsHead{height:58px;padding:0 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.settingsHead strong{font-size:14px}
-.close{border:0;background:transparent;color:var(--muted);font-size:21px}
-.settingsBody{padding:15px}
-.setting{padding:11px 0;border-bottom:1px solid #ffffff08;display:flex;align-items:center;justify-content:space-between}
-.setting span{font-size:11px}
-.setting select,.setting input[type=number]{height:30px;background:#0b0f14;color:#fff;border:1px solid var(--border2);border-radius:5px;padding:0 7px;font-size:10px}
-.toast{position:fixed;left:50%;bottom:42px;transform:translateX(-50%) translateY(15px);background:#151a21;border:1px solid var(--border2);box-shadow:0 12px 35px #0008;color:#fff;padding:9px 13px;border-radius:7px;font-size:10px;opacity:0;pointer-events:none;transition:.2s;z-index:100}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden
+}
+
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,
+    "Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:13px
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit
+}
+
+button{
+  cursor:pointer
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:2px solid #3b82f680;
+  outline-offset:1px
+}
+
+.app{
+  height:100vh;
+  display:flex;
+  overflow:hidden
+}
+
+.sidebar{
+  width:270px;
+  min-width:270px;
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  z-index:40
+}
+
+.brand{
+  height:58px;
+  min-height:58px;
+  padding:0 15px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--border)
+}
+
+.brandMark{
+  width:31px;
+  height:31px;
+  border-radius:9px;
+  background:linear-gradient(135deg,#2563eb,#60a5fa);
+  display:grid;
+  place-items:center;
+  font:800 10px monospace;
+  color:white;
+  box-shadow:0 5px 20px #2563eb35
+}
+
+.brandName{
+  font-size:15px;
+  font-weight:750;
+  letter-spacing:-.02em
+}
+
+.brandBadge{
+  margin-left:auto;
+  font-size:8px;
+  padding:3px 6px;
+  border:1px solid #ffffff12;
+  border-radius:5px;
+  color:var(--muted)
+}
+
+.sideHeader{
+  height:43px;
+  min-height:43px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.1em
+}
+
+.sideHeaderTools{
+  display:flex;
+  align-items:center;
+  gap:3px
+}
+
+.iconButton{
+  width:27px;
+  height:27px;
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:var(--muted);
+  display:grid;
+  place-items:center;
+  font-size:15px
+}
+
+.iconButton:hover{
+  background:#ffffff0c;
+  color:white
+}
+
+.list{
+  padding:0 7px;
+  overflow:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#303946 transparent
+}
+
+.item{
+  height:34px;
+  padding:0 8px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-size:11px;
+  cursor:pointer;
+  user-select:none;
+  transition:.12s
+}
+
+.item:hover{
+  background:#ffffff08;
+  color:#fff
+}
+
+.item.active{
+  background:#3b82f614;
+  color:#9bcaff;
+  box-shadow:inset 2px 0 var(--accent)
+}
+
+.itemIcon{
+  width:18px;
+  min-width:18px;
+  text-align:center;
+  font-size:11px;
+  color:var(--muted2)
+}
+
+.item.active .itemIcon{
+  color:var(--accent2)
+}
+
+.itemText{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  flex:1
+}
+
+.itemMeta{
+  font-size:8px;
+  color:var(--muted2);
+  opacity:0
+}
+
+.item:hover .itemMeta{
+  opacity:1
+}
+
+.emptySide{
+  padding:18px 12px;
+  color:#596574;
+  font-size:10px;
+  text-align:center;
+  line-height:1.7
+}
+
+.projectSection{
+  min-height:0
+}
+
+.filesSection{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column
+}
+
+.sidebarBottom{
+  border-top:1px solid var(--border);
+  padding:7px;
+  display:flex;
+  flex-direction:column;
+  gap:2px
+}
+
+.sideButton{
+  height:34px;
+  padding:0 9px;
+  border-radius:6px;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:10px;
+  cursor:pointer
+}
+
+.sideButton:hover{
+  background:#ffffff08;
+  color:#fff
+}
+
+.sideButton span:first-child{
+  width:17px;
+  text-align:center
+}
+
+.main{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column
+}
+
+.topbar{
+  height:58px;
+  min-height:58px;
+  border-bottom:1px solid var(--border);
+  background:var(--panel);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+  gap:15px
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0
+}
+
+.menu{
+  display:none;
+  width:32px;
+  height:32px;
+  border:1px solid var(--border);
+  background:var(--panel3);
+  color:var(--muted);
+  border-radius:7px
+}
+
+.path{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  overflow:hidden;
+  font-size:11px
+}
+
+.pathProject,
+.pathFile{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+
+.pathProject{
+  color:var(--muted)
+}
+
+.pathFile{
+  color:var(--text);
+  font-weight:700
+}
+
+.pathSeparator{
+  color:#46505e
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+  align-items:center
+}
+
+.btn{
+  height:31px;
+  padding:0 10px;
+  border:1px solid var(--border2);
+  border-radius:6px;
+  background:#151b24;
+  color:var(--text);
+  font-size:10px;
+  transition:.12s;
+  white-space:nowrap
+}
+
+.btn:hover{
+  background:#202934;
+  border-color:#465363
+}
+
+.btn:active{
+  transform:translateY(1px)
+}
+
+.btn.save{
+  background:#15803d;
+  border-color:#22c55e;
+  color:white
+}
+
+.btn.save:hover{
+  background:#16a34a
+}
+
+.btn.run{
+  background:#2563eb;
+  border-color:#3b82f6;
+  color:white
+}
+
+.btn.run:hover{
+  background:#1d4ed8
+}
+
+.btn.danger{
+  background:#ef444414;
+  border-color:#ef444444;
+  color:#ff8b86
+}
+
+.btn.small{
+  height:28px;
+  padding:0 8px
+}
+
+.workspace{
+  flex:1;
+  min-height:0;
+  display:flex;
+  overflow:hidden
+}
+
+.editorPanel{
+  width:55%;
+  min-width:300px;
+  display:flex;
+  flex-direction:column;
+  border-right:1px solid var(--border);
+  background:var(--editor);
+  position:relative
+}
+
+.tabs{
+  height:40px;
+  min-height:40px;
+  background:var(--panel2);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  overflow:auto;
+  scrollbar-width:none
+}
+
+.tabs::-webkit-scrollbar{
+  display:none
+}
+
+.tab{
+  height:40px;
+  min-width:100px;
+  max-width:190px;
+  padding:0 11px;
+  border:0;
+  border-right:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font:10px monospace;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap
+}
+
+.tab:hover{
+  background:#ffffff07;
+  color:white
+}
+
+.tab.active{
+  background:var(--editor);
+  color:#fff;
+  box-shadow:inset 0 2px var(--accent)
+}
+
+.tabIcon{
+  color:var(--muted2)
+}
+
+.tab.active .tabIcon{
+  color:var(--accent2)
+}
+
+.tabClose{
+  margin-left:auto;
+  width:18px;
+  height:18px;
+  border:0;
+  background:transparent;
+  color:var(--muted2);
+  border-radius:4px;
+  opacity:0
+}
+
+.tab:hover .tabClose,
+.tab.active .tabClose{
+  opacity:1
+}
+
+.tabClose:hover{
+  background:#ffffff12;
+  color:#fff
+}
+
+.editor{
+  flex:1;
+  min-height:0;
+  display:flex;
+  overflow:hidden
+}
+
+.lines{
+  width:54px;
+  min-width:54px;
+  padding:13px 10px 13px 0;
+  color:#46505d;
+  text-align:right;
+  font:12px/1.65 Consolas,monospace;
+  overflow:hidden;
+  user-select:none;
+  border-right:1px solid #ffffff03
+}
+
+#code{
+  flex:1;
+  width:100%;
+  height:100%;
+  border:0;
+  outline:0;
+  resize:none;
+  background:var(--editor);
+  color:#d7dee8;
+  padding:13px 17px;
+  font:12px/1.65 Consolas,Monaco,"Courier New",monospace;
+  white-space:pre;
+  overflow:auto;
+  tab-size:2;
+  caret-color:#60a5fa
+}
+
+#code::selection{
+  background:#2563eb55
+}
+
+.resizer{
+  width:5px;
+  cursor:col-resize;
+  background:transparent;
+  z-index:5
+}
+
+.resizer:hover,
+.resizer.active{
+  background:var(--accent)
+}
+
+.editorEmpty{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  color:var(--muted)
+}
+
+.centerIcon{
+  width:55px;
+  height:55px;
+  border:1px solid var(--border2);
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  margin-bottom:14px;
+  background:linear-gradient(145deg,#111720,#0b0f15);
+  color:#728096
+}
+
+.centerEmpty h2{
+  font-size:15px;
+  color:var(--text);
+  font-weight:650
+}
+
+.centerEmpty p{
+  font-size:10px;
+  margin-top:6px;
+  max-width:280px;
+  line-height:1.7;
+  color:var(--muted)
+}
+
+.centerAction{
+  margin-top:15px;
+  height:34px;
+  padding:0 14px;
+  background:var(--accent);
+  border:1px solid var(--accent);
+  border-radius:6px;
+  color:#fff;
+  font-size:10px
+}
+
+.preview{
+  flex:1;
+  min-width:250px;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  overflow:hidden
+}
+
+.previewHead{
+  height:40px;
+  min-height:40px;
+  background:var(--panel2);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 9px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.08em
+}
+
+.previewHeadLeft{
+  display:flex;
+  align-items:center;
+  gap:7px
+}
+
+.liveDot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 9px #22c55e99
+}
+
+.previewActions{
+  display:flex;
+  gap:2px;
+  align-items:center
+}
+
+.previewActions button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  height:27px;
+  padding:0 7px;
+  border-radius:5px;
+  font-size:9px
+}
+
+.previewActions button:hover{
+  background:#ffffff0a;
+  color:#fff
+}
+
+.previewActions button.active{
+  background:#3b82f61c;
+  color:#8ebfff
+}
+
+.previewBody{
+  flex:1;
+  min-height:0;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  background:#dce1e7;
+  overflow:auto;
+  padding:0
+}
+
+#preview{
+  border:0;
+  background:#fff;
+  width:100%;
+  height:100%;
+  display:block;
+  box-shadow:0 0 20px #0001
+}
+
+.status{
+  height:27px;
+  min-height:27px;
+  border-top:1px solid var(--border);
+  background:var(--panel);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  color:var(--muted);
+  font-size:9px;
+  gap:10px
+}
+
+.statusLeft,
+.statusRight{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+
+.statusDot{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--success);
+  margin-right:5px
+}
+
+.status.unsaved .statusDot{
+  background:var(--warning)
+}
+
+.status.error .statusDot{
+  background:var(--danger)
+}
+
+.modalLayer,
+.menuLayer{
+  position:fixed;
+  inset:0;
+  background:#000b;
+  backdrop-filter:blur(5px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100
+}
+
+.modalLayer.show,
+.menuLayer.show{
+  display:flex
+}
+
+.modal{
+  width:min(410px,calc(100% - 30px));
+  background:#151b23;
+  border:1px solid var(--border2);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:20px
+}
+
+.modalTop{
+  display:flex;
+  align-items:flex-start;
+  gap:11px
+}
+
+.modalIcon{
+  width:34px;
+  height:34px;
+  border-radius:8px;
+  background:#3b82f615;
+  color:#73b4ff;
+  display:grid;
+  place-items:center;
+  font-size:14px;
+  flex:none
+}
+
+.modal h2{
+  font-size:14px
+}
+
+.modal p{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:4px;
+  line-height:1.6
+}
+
+.input{
+  width:100%;
+  height:39px;
+  margin-top:15px;
+  background:#0a0e13;
+  border:1px solid var(--border2);
+  border-radius:6px;
+  color:#fff;
+  padding:0 10px;
+  font-size:11px;
+  outline:0
+}
+
+.input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px #3b82f612
+}
+
+.modalButtons{
+  display:flex;
+  justify-content:flex-end;
+  gap:6px;
+  margin-top:14px
+}
+
+.context{
+  position:absolute;
+  width:190px;
+  background:#151b23;
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:5px;
+  box-shadow:0 15px 50px #000b
+}
+
+.contextLabel{
+  padding:6px 8px 5px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#596574;
+  text-transform:uppercase
+}
+
+.contextItem{
+  height:32px;
+  border-radius:5px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 9px;
+  color:#aab4c1;
+  font-size:10px
+}
+
+.contextItem:hover{
+  background:#ffffff0b;
+  color:#fff
+}
+
+.contextItem.delete:hover{
+  background:#ef444415;
+  color:#ff7770
+}
+
+.contextSep{
+  height:1px;
+  background:#ffffff0a;
+  margin:4px 2px
+}
+
+.settings{
+  position:fixed;
+  right:0;
+  top:0;
+  height:100%;
+  width:350px;
+  max-width:100%;
+  background:#111720;
+  border-left:1px solid var(--border);
+  z-index:80;
+  transform:translateX(100%);
+  transition:.22s ease;
+  box-shadow:-20px 0 60px #0007;
+  display:flex;
+  flex-direction:column
+}
+
+.settings.open{
+  transform:translateX(0)
+}
+
+.settingsHead{
+  height:58px;
+  min-height:58px;
+  padding:0 15px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+
+.settingsHead strong{
+  font-size:14px
+}
+
+.close{
+  width:30px;
+  height:30px;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:20px;
+  border-radius:6px
+}
+
+.close:hover{
+  background:#ffffff09;
+  color:#fff
+}
+
+.settingsBody{
+  padding:13px;
+  overflow:auto
+}
+
+.settingsGroup{
+  padding:5px 0 12px;
+  margin-bottom:8px;
+  border-bottom:1px solid #ffffff08
+}
+
+.settingsGroupTitle{
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.1em;
+  color:#596574;
+  margin-bottom:4px
+}
+
+.setting{
+  min-height:43px;
+  padding:7px 2px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.settingInfo{
+  display:flex;
+  flex-direction:column;
+  gap:2px
+}
+
+.settingInfo span{
+  font-size:10px
+}
+
+.settingInfo small{
+  font-size:8px;
+  color:var(--muted2)
+}
+
+.setting select,
+.setting input[type=number]{
+  height:30px;
+  min-width:70px;
+  background:#0b0f14;
+  color:#fff;
+  border:1px solid var(--border2);
+  border-radius:5px;
+  padding:0 7px;
+  font-size:9px
+}
+
+.switch{
+  position:relative;
+  width:36px;
+  height:20px;
+  display:inline-block
+}
+
+.switch input{
+  opacity:0;
+  width:0;
+  height:0
+}
+
+.slider{
+  position:absolute;
+  inset:0;
+  background:#252d38;
+  border:1px solid #384351;
+  border-radius:20px;
+  transition:.15s
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  width:14px;
+  height:14px;
+  left:2px;
+  top:2px;
+  border-radius:50%;
+  background:#8a96a5;
+  transition:.15s
+}
+
+.switch input:checked+.slider{
+  background:#2563eb;
+  border-color:#3b82f6
+}
+
+.switch input:checked+.slider:before{
+  transform:translateX(16px);
+  background:white
+}
+
+.searchBox{
+  margin:0 7px 7px;
+  position:relative
+}
+
+.searchBox input{
+  width:100%;
+  height:30px;
+  background:#090d12;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:#fff;
+  padding:0 9px 0 28px;
+  font-size:9px;
+  outline:0
+}
+
+.searchBox input:focus{
+  border-color:var(--border2)
+}
+
+.searchIcon{
+  position:absolute;
+  left:9px;
+  top:8px;
+  font-size:10px;
+  color:var(--muted2)
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:42px;
+  transform:translateX(-50%) translateY(15px);
+  background:#151b23;
+  border:1px solid var(--border2);
+  box-shadow:0 12px 35px #0009;
+  color:#fff;
+  padding:9px 13px;
+  border-radius:7px;
+  font-size:10px;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  z-index:200;
+  white-space:nowrap
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0)
+}
+
+.hidden{
+  display:none!important
+}
+
+@media(max-width:900px){
+  .sidebar{
+    width:240px;
+    min-width:240px
+  }
+
+  .editorPanel{
+    width:50%
+  }
+
+  .previewActions button[data-device="tablet"]{
+    display:none
+  }
+}
+
 @media(max-width:700px){
-.sidebar{position:absolute;left:0;top:0;bottom:0;z-index:40;transform:translateX(-100%);transition:.2s}
-.sidebar.open{transform:translateX(0)}
-.menu{display:block}
-.preview{display:none}
-.editorPanel{width:100%;min-width:0}
-.resizer{display:none}
+  .sidebar{
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    transform:translateX(-100%);
+    transition:.2s;
+    box-shadow:15px 0 45px #0008
+  }
+
+  .sidebar.open{
+    transform:translateX(0)
+  }
+
+  .menu{
+    display:block
+  }
+
+  .preview{
+    display:none
+  }
+
+  .editorPanel{
+    width:100%;
+    min-width:0;
+    border-right:0
+  }
+
+  .resizer{
+    display:none
+  }
+
+  .actions .btn:first-child{
+    display:none
+  }
+
+  .pathProject{
+    display:none
+  }
+
+  .pathSeparator{
+    display:none
+  }
+
+  .topbar{
+    padding:0 8px
+  }
+
+  .settings{
+    width:100%
+  }
 }
+
+/* DataCards authorization screen */
+.app:not(.authenticated){
+  display:none
+}
+.authScreen{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:
+    radial-gradient(ellipse at 50% 0%,#17315a 0%,transparent 48%),
+    linear-gradient(135deg,#070a0f,#0b111a 55%,#08101b);
+}
+.authScreen.hidden{display:none!important}
+.authPanel{
+  width:100%;
+  max-width:390px;
+  padding:28px;
+  border:1px solid #2b3747;
+  border-radius:15px;
+  background:linear-gradient(160deg,#151d29,#0d1118 70%);
+  box-shadow:0 24px 80px #000b;
+}
+.authMark{
+  width:54px;
+  height:54px;
+  margin:0 auto 17px;
+  display:grid;
+  place-items:center;
+  border:1px solid #3b82f655;
+  border-radius:15px;
+  background:linear-gradient(135deg,#1d4ed8,#2563eb);
+  color:#fff;
+  font:800 20px Consolas,monospace;
+  box-shadow:0 8px 28px #2563eb35;
+}
+.authPanel h1{
+  color:#edf3f9;
+  font-size:22px;
+  text-align:center;
+  letter-spacing:-.03em;
+}
+.authSubtitle{
+  margin:7px 0 23px;
+  color:#8b98a9;
+  font-size:11px;
+  text-align:center;
+  line-height:1.6;
+}
+.authField{margin-bottom:14px}
+.authField label{
+  display:block;
+  margin-bottom:7px;
+  color:#9aa6b6;
+  font-size:10px;
+  font-weight:750;
+}
+.authInput{
+  width:100%;
+  height:42px;
+  margin:0;
+  padding:0 11px;
+  border:1px solid #303b49;
+  border-radius:7px;
+  outline:0;
+  background:#080c12;
+  color:#edf3f9;
+  font-size:12px;
+}
+.authInput:focus{
+  border-color:#3b82f6;
+  box-shadow:0 0 0 3px #3b82f61c;
+}
+.authError{
+  display:none;
+  margin-bottom:13px;
+  padding:9px 10px;
+  border:1px solid #ef444444;
+  border-radius:7px;
+  background:#ef444414;
+  color:#ff9b96;
+  font-size:10px;
+  line-height:1.5;
+}
+.authError.show{display:block}
+.authSubmit{
+  width:100%;
+  height:42px;
+  margin-top:4px;
+  border:1px solid #3b82f6;
+  border-radius:7px;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:#fff;
+  font-size:11px;
+  font-weight:750;
+  transition:.15s;
+}
+.authSubmit:hover{filter:brightness(1.1)}
+.authSubmit:disabled{opacity:.7;cursor:wait}
+.authFoot{
+  display:block;
+  margin-top:15px;
+  color:#667487;
+  font-size:9px;
+  text-align:center;
+}
+.authLogout{color:#ff9993}
+
 </style>
 </head>
+
 <body>
 
-<div class="app">
+<div class="authScreen" id="authScreen">
+  <form class="authPanel" id="authForm" autocomplete="on">
+    <div class="authMark">&lt;/&gt;</div>
+    <h1>CodeSpace</h1>
+    <p class="authSubtitle">Sign in to access your workspace.</p>
 
-<aside class="sidebar" id="sidebar">
+    <div class="authError" id="authError" role="alert">
+      Invalid User ID or Password
+    </div>
 
-<div class="brand">
-<div class="brandMark">&lt;/&gt;</div>
-<div class="brandName">CodeSpace</div>
+    <div class="authField">
+      <label for="authUser">USER ID</label>
+      <input class="authInput" id="authUser" name="username"
+        type="text" autocomplete="username" placeholder="Enter User ID" required>
+    </div>
+
+    <div class="authField">
+      <label for="authPassword">PASSWORD</label>
+      <input class="authInput" id="authPassword" name="password"
+        type="password" autocomplete="current-password"
+        placeholder="Enter Password" required>
+    </div>
+
+    <button class="authSubmit" id="authButton" type="submit">Sign In</button>
+    <small class="authFoot">Authorized access only</small>
+  </form>
 </div>
 
-<div class="sideHeader">
-<span>PROJECTS</span>
-<button class="add" id="newProject">+</button>
-</div>
+<div class="app" id="codeSpaceApp">
 
-<div class="list" id="projectList"></div>
+  <aside class="sidebar" id="sidebar">
 
-<div class="sideHeader" style="margin-top:10px">
-<span id="fileTitle">FILES</span>
-<button class="add" id="newFile">+</button>
-</div>
+    <div class="brand">
+      <div class="brandMark">&lt;/&gt;</div>
+      <div class="brandName">CodeSpace</div>
+      <div class="brandBadge">WEB IDE</div>
+    </div>
 
-<div class="list" id="fileList"></div>
+    <div class="sideHeader">
+      <span>PROJECTS</span>
 
-<div class="sidebarBottom">
-<div class="sideButton" id="settingsButton">⚙ Settings</div>
-</div>
+      <div class="sideHeaderTools">
+        <button class="iconButton" id="refreshProjects" title="Refresh projects">↻</button>
+        <button class="iconButton" id="newProject" title="New project">+</button>
+      </div>
+    </div>
 
-</aside>
+    <div class="searchBox">
+      <span class="searchIcon">⌕</span>
+      <input id="fileSearch" type="search" placeholder="Search files...">
+    </div>
 
-<main class="main">
+    <div class="projectSection">
+      <div class="list" id="projectList"></div>
+    </div>
 
-<header class="topbar">
+    <div class="sideHeader" style="margin-top:8px">
+      <span id="fileTitle">FILES</span>
 
-<div class="left">
-<button class="menu" id="menu">☰</button>
+      <div class="sideHeaderTools">
+        <button class="iconButton" id="newFile" title="New file">+</button>
+      </div>
+    </div>
 
-<div class="path">
-<span class="pathProject" id="projectName"></span>
-<span id="pathSeparator" style="color:#4b5563"></span>
-<strong class="pathFile" id="fileName"></strong>
-</div>
+    <div class="filesSection">
+      <div class="list" id="fileList"></div>
+    </div>
 
-</div>
+    <div class="sidebarBottom">
+      <div class="sideButton" id="settingsButton">
+        <span>⚙</span>
+        <span>Settings</span>
+      </div>
 
-<div class="actions">
-<button class="btn" id="more">⋯</button>
-<button class="btn save" id="save">Save</button>
-<button class="btn run" id="run">Run</button>
-</div>
+      <div class="sideButton authLogout" id="codeSpaceLogout" onclick="logoutCodeSpace()" role="button" tabindex="0">
+        <span>↪</span>
+        <span>Sign out</span>
+      </div>
+    </div>
 
-</header>
+  </aside>
 
-<section class="workspace">
+  <main class="main">
 
-<div class="editorPanel" id="editorPanel">
+    <header class="topbar">
 
-<div class="tabs" id="tabs"></div>
+      <div class="left">
 
-<div class="editor" id="editorArea">
+        <button class="menu" id="menu">☰</button>
 
-<div class="lines" id="lines"></div>
+        <div class="path">
+          <span class="pathProject" id="projectName"></span>
+          <span class="pathSeparator" id="pathSeparator"></span>
+          <strong class="pathFile" id="fileName"></strong>
+        </div>
 
-<textarea id="code" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+      </div>
 
-</div>
+      <div class="actions">
+        <button class="btn" id="more" title="More actions">⋯</button>
+        <button class="btn save" id="save">Save</button>
+        <button class="btn run" id="run">▶ Run</button>
+      </div>
 
-<div class="centerEmpty" id="editorEmpty">
+    </header>
 
-<div class="centerIcon">⌘</div>
+    <section class="workspace">
 
-<h2>No file selected</h2>
+      <div class="editorPanel" id="editorPanel">
 
-<p>Create or select a file to start working.</p>
+        <div class="tabs" id="tabs"></div>
 
-<button class="centerAction" id="emptyFile">Create File</button>
+        <div class="editor" id="editorArea">
 
-</div>
+          <div class="lines" id="lines"></div>
 
-</div>
+          <textarea
+            id="code"
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+          ></textarea>
 
-<div class="resizer" id="resizer"></div>
+        </div>
 
-<div class="preview">
+        <div class="editorEmpty" id="editorEmpty">
 
-<div class="previewHead">
+          <div class="centerIcon">⌘</div>
 
-<span>PREVIEW</span>
+          <h2>No file selected</h2>
 
-<div class="previewActions">
-<button data-device="desktop">Desktop</button>
-<button data-device="tablet">Tablet</button>
-<button data-device="mobile">Mobile</button>
-<button id="refresh">↻</button>
-</div>
+          <p>
+            Create or select a file to start working on your project.
+          </p>
 
-</div>
+          <button class="centerAction" id="emptyFile">
+            Create File
+          </button>
 
-<div class="previewBody">
-<iframe id="preview" sandbox="allow-scripts"></iframe>
-</div>
+        </div>
 
-</div>
+      </div>
 
-</section>
+      <div class="resizer" id="resizer"></div>
 
-<footer class="status">
-<span><span class="statusDot"></span><span id="status">Ready</span></span>
-<span id="position"></span>
-</footer>
+      <div class="preview">
 
-</main>
+        <div class="previewHead">
+
+          <div class="previewHeadLeft">
+            <span class="liveDot"></span>
+            <span>PREVIEW</span>
+          </div>
+
+          <div class="previewActions">
+
+            <button data-device="desktop" class="active">
+              Desktop
+            </button>
+
+            <button data-device="tablet">
+              Tablet
+            </button>
+
+            <button data-device="mobile">
+              Mobile
+            </button>
+
+            <button id="refresh" title="Refresh preview">
+              ↻
+            </button>
+
+            <button id="fullscreen" title="Fullscreen preview">
+              ⛶
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="previewBody" id="previewBody">
+
+          <iframe
+            id="preview"
+            sandbox="allow-scripts"
+            title="Code preview"
+          ></iframe>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <footer class="status" id="statusBar">
+
+      <div class="statusLeft">
+        <span>
+          <span class="statusDot"></span>
+          <span id="status">Ready</span>
+        </span>
+      </div>
+
+      <div class="statusRight">
+        <span id="language">Plain Text</span>
+        <span id="position"></span>
+        <span id="charCount">0 chars</span>
+      </div>
+
+    </footer>
+
+  </main>
+
 </div>
 
 <div class="modalLayer" id="modalLayer">
 
-<div class="modal">
+  <div class="modal">
 
-<h2 id="modalTitle"></h2>
+    <div class="modalTop">
 
-<p id="modalDescription"></p>
+      <div class="modalIcon">✦</div>
 
-<input class="input" id="modalInput" autocomplete="off">
+      <div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+      </div>
 
-<div class="modalButtons">
-<button class="btn" id="modalCancel">Cancel</button>
-<button class="btn run" id="modalConfirm">Create</button>
-</div>
+    </div>
 
-</div>
+    <input
+      class="input"
+      id="modalInput"
+      autocomplete="off"
+    >
+
+    <div class="modalButtons">
+      <button class="btn" id="modalCancel">Cancel</button>
+      <button class="btn run" id="modalConfirm">Create</button>
+    </div>
+
+  </div>
 
 </div>
 
@@ -249,1906 +1465,2185 @@ button{cursor:pointer}
 
 <aside class="settings" id="settings">
 
-<div class="settingsHead">
-<strong>Settings</strong>
-<button class="close" id="closeSettings">×</button>
-</div>
+  <div class="settingsHead">
+    <strong>Settings</strong>
+    <button class="close" id="closeSettings">×</button>
+  </div>
 
-<div class="settingsBody">
+  <div class="settingsBody">
 
-<div class="setting">
-<span>Font Size</span>
-<input type="number" id="fontSize" min="10" max="24">
-</div>
+    <div class="settingsGroup">
 
-<div class="setting">
-<span>Tab Size</span>
-<select id="tabSize">
-<option value="2">2</option>
-<option value="4">4</option>
-<option value="8">8</option>
-</select>
-</div>
+      <div class="settingsGroupTitle">EDITOR</div>
 
-<div class="setting">
-<span>Theme</span>
-<select id="theme">
-<option value="dark">Dark</option>
-<option value="midnight">Midnight</option>
-<option value="light">Light</option>
-</select>
-</div>
+      <div class="setting">
 
-<div class="setting">
-<span>Auto Run</span>
-<input type="checkbox" id="autoRun">
-</div>
+        <div class="settingInfo">
+          <span>Font Size</span>
+          <small>Editor text size</small>
+        </div>
 
-<div class="setting">
-<span>Line Numbers</span>
-<input type="checkbox" id="lineNumbers">
-</div>
+        <input
+          type="number"
+          id="fontSize"
+          min="10"
+          max="24"
+        >
 
-<div class="setting">
-<span>Word Wrap</span>
-<input type="checkbox" id="wordWrap">
-</div>
+      </div>
 
-</div>
+      <div class="setting">
+
+        <div class="settingInfo">
+          <span>Tab Size</span>
+          <small>Spaces inserted by Tab</small>
+        </div>
+
+        <select id="tabSize">
+          <option value="2">2</option>
+          <option value="4">4</option>
+          <option value="8">8</option>
+        </select>
+
+      </div>
+
+      <div class="setting">
+
+        <div class="settingInfo">
+          <span>Line Numbers</span>
+          <small>Show editor line numbers</small>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="lineNumbers">
+          <span class="slider"></span>
+        </label>
+
+      </div>
+
+      <div class="setting">
+
+        <div class="settingInfo">
+          <span>Word Wrap</span>
+          <small>Wrap long lines</small>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="wordWrap">
+          <span class="slider"></span>
+        </label>
+
+      </div>
+
+    </div>
+
+    <div class="settingsGroup">
+
+      <div class="settingsGroupTitle">PREVIEW</div>
+
+      <div class="setting">
+
+        <div class="settingInfo">
+          <span>Auto Run</span>
+          <small>Update preview while typing</small>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="autoRun">
+          <span class="slider"></span>
+        </label>
+
+      </div>
+
+    </div>
+
+    <div class="settingsGroup">
+
+      <div class="settingsGroupTitle">APPEARANCE</div>
+
+      <div class="setting">
+
+        <div class="settingInfo">
+          <span>Theme</span>
+          <small>Choose interface theme</small>
+        </div>
+
+        <select id="theme">
+          <option value="dark">Dark</option>
+          <option value="midnight">Midnight</option>
+          <option value="light">Light</option>
+        </select>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </aside>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbzadukuKham7ZkvSIFbS5Xj7nhzH53LVZat7lRKSLEpMQygnmVJxonFwaEPy7LFBLGg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzadukuKham7ZkvSIFbS5Xj7nhzH53LVZat7lRKSLEpMQygnmVJxonFwaEPy7LFBLGg/exec";
 
-const state={
-projects:[],
-currentProject:null,
-currentFile:null,
-settings:{
-fontSize:12,
-tabSize:2,
-theme:"dark",
-autoRun:false,
-lineNumbers:true,
-wordWrap:false
-}
+const state = {
+  projects: [],
+  currentProject: null,
+  currentFile: null,
+  settings: {
+    fontSize: 12,
+    tabSize: 2,
+    theme: "dark",
+    autoRun: false,
+    lineNumbers: true,
+    wordWrap: false
+  }
 };
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-let modalAction=null;
-let resizeActive=false;
-let toastTimer=null;
-let saveTimer=null;
+const AUTH_USER = "@urstrulyrangaswamy";
+const AUTH_HASH = "MjM0MzgtQ00tMDY5";
+let codeSpaceInitialized = false;
 
-function status(text){
-$("status").textContent=text;
+function encodeAuthPassword(value) {
+  return btoa(unescape(encodeURIComponent(value)));
 }
 
-function toast(message){
-const el=$("toast");
-el.textContent=message;
-el.classList.add("show");
-clearTimeout(toastTimer);
-toastTimer=setTimeout(()=>{
-el.classList.remove("show");
-},2200);
+function codeSpaceLogin(event) {
+  if (event) event.preventDefault();
+
+  const user = $("authUser").value.trim();
+  const password = $("authPassword").value;
+  const error = $("authError");
+  const button = $("authButton");
+
+  if (user === AUTH_USER && encodeAuthPassword(password) === AUTH_HASH) {
+    sessionStorage.setItem("codespace-auth", "1");
+    error.classList.remove("show");
+    button.disabled = true;
+    button.textContent = "Access Granted";
+
+    window.setTimeout(() => {
+      button.disabled = false;
+      button.textContent = "Sign In";
+      openCodeSpace();
+    }, 220);
+  } else {
+    error.textContent = "Invalid User ID or Password";
+    error.classList.add("show");
+    $("authPassword").value = "";
+    $("authPassword").focus();
+  }
 }
 
-function persist(){
-try{
-localStorage.setItem(
-"codespace_v4",
-JSON.stringify({
-projects:state.projects,
-currentProject:state.currentProject,
-currentFile:state.currentFile,
-settings:state.settings
-})
-);
-}catch(e){}
+function openCodeSpace() {
+  $("authScreen").classList.add("hidden");
+  $("codeSpaceApp").classList.add("authenticated");
+
+  if (codeSpaceInitialized) return;
+  codeSpaceInitialized = true;
+  initializeCodeSpace();
 }
 
-function restore(){
-try{
-const saved=JSON.parse(
-localStorage.getItem("codespace_v4")
-);
+function logoutCodeSpace() {
+  const file = currentFile();
 
-if(!saved)return;
+  if (file) {
+    file.content = $("code").value;
+    persist();
+  }
 
-if(Array.isArray(saved.projects)){
-state.projects=saved.projects;
+  sessionStorage.removeItem("codespace-auth");
+  $("codeSpaceApp").classList.remove("authenticated");
+  $("authScreen").classList.remove("hidden");
+  $("authUser").value = "";
+  $("authPassword").value = "";
+  $("authError").classList.remove("show");
+  $("authUser").focus();
 }
 
-if(saved.currentProject){
-state.currentProject=saved.currentProject;
-}
-
-if(saved.currentFile){
-state.currentFile=saved.currentFile;
-}
-
-if(saved.settings){
-state.settings={
-...state.settings,
-...saved.settings
-};
-}
-
-}catch(e){}
-}
-
-function projectFiles(){
-const project=state.projects.find(
-x=>x.id===state.currentProject
-);
-
-return project
-?project.files||[]
-:[];
-}
-
-function currentFile(){
-return projectFiles().find(
-x=>x.id===state.currentFile
-)||null;
-}
-
-function escape(value){
-return String(value).replace(
-/[&<>"']/g,
-x=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-}[x])
-);
-}
-
-function fileIcon(name){
-const n=name.toLowerCase();
-
-if(n.endsWith(".html")||n.endsWith(".htm"))return"◇";
-if(n.endsWith(".css"))return"◆";
-if(n.endsWith(".js")||n.endsWith(".mjs"))return"◈";
-if(n.endsWith(".json"))return"{}";
-if(n.endsWith(".md"))return"≡";
-
-return"○";
-}
-
-function renderProjects(){
-
-const box=$("projectList");
-
-box.innerHTML="";
-
-if(!state.projects.length){
-
-box.innerHTML=
-'<div class="emptySide">No projects yet.<br>Create one to begin.</div>';
-
-return;
-}
-
-state.projects.forEach(project=>{
-
-const el=document.createElement("div");
-
-el.className=
-"item"+
-(project.id===state.currentProject?" active":"");
-
-el.innerHTML=
-`<span class="itemIcon">▰</span><span>${escape(project.name)}</span>`;
-
-el.onclick=()=>{
-state.currentProject=project.id;
-state.currentFile=
-project.files?.[0]?.id||null;
-render();
-};
-
-el.oncontextmenu=e=>{
-e.preventDefault();
-openContext(
-e.clientX,
-e.clientY,
-"project",
-project.id
-);
-};
-
-box.appendChild(el);
-
+$("authForm").addEventListener("submit", codeSpaceLogin);
+$("authPassword").addEventListener("keydown", event => {
+  if (event.key === "Enter") codeSpaceLogin(event);
 });
+
+let modalAction = null;
+let resizeActive = false;
+let toastTimer = null;
+let autoRunTimer = null;
+let isSaving = false;
+
+/* -------------------------------------------------------
+   Helpers
+------------------------------------------------------- */
+
+function status(text, type = "") {
+  $("status").textContent = text;
+  $("statusBar").classList.remove("unsaved", "error");
+
+  if (type) {
+    $("statusBar").classList.add(type);
+  }
 }
 
-function renderFiles(){
+function toast(message) {
+  const el = $("toast");
 
-const box=$("fileList");
+  el.textContent = message;
+  el.classList.add("show");
 
-const files=projectFiles();
+  clearTimeout(toastTimer);
 
-box.innerHTML="";
-
-if(!state.currentProject){
-
-$("fileTitle").textContent="FILES";
-
-box.innerHTML=
-'<div class="emptySide">Select a project.</div>';
-
-return;
+  toastTimer = setTimeout(() => {
+    el.classList.remove("show");
+  }, 2200);
 }
 
-$("fileTitle").textContent="FILES";
-
-if(!files.length){
-
-box.innerHTML=
-'<div class="emptySide">No files yet.<br>Create a file to begin.</div>';
-
-return;
+function persist() {
+  try {
+    localStorage.setItem(
+      "codespace_v5",
+      JSON.stringify({
+        projects: state.projects,
+        currentProject: state.currentProject,
+        currentFile: state.currentFile,
+        settings: state.settings
+      })
+    );
+  } catch (error) {
+    console.warn("Could not save local state:", error);
+  }
 }
 
-files.forEach(file=>{
+function restore() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("codespace_v5")
+    );
 
-const el=document.createElement("div");
+    if (!saved) return;
 
-el.className=
-"item"+
-(file.id===state.currentFile?" active":"");
+    if (Array.isArray(saved.projects)) {
+      state.projects = saved.projects;
+    }
 
-el.innerHTML=
-`<span class="itemIcon">${fileIcon(file.name)}</span><span>${escape(file.name)}</span>`;
+    if (saved.currentProject) {
+      state.currentProject = saved.currentProject;
+    }
 
-el.onclick=()=>{
-state.currentFile=file.id;
-render();
-};
+    if (saved.currentFile) {
+      state.currentFile = saved.currentFile;
+    }
 
-el.oncontextmenu=e=>{
-e.preventDefault();
-
-openContext(
-e.clientX,
-e.clientY,
-"file",
-file.id
-);
-};
-
-box.appendChild(el);
-
-});
+    if (saved.settings && typeof saved.settings === "object") {
+      state.settings = {
+        ...state.settings,
+        ...saved.settings
+      };
+    }
+  } catch (error) {
+    console.warn("Could not restore local state:", error);
+  }
 }
 
-function renderTabs(){
+function projectFiles() {
+  const project = state.projects.find(
+    project => project.id === state.currentProject
+  );
 
-const box=$("tabs");
-
-box.innerHTML="";
-
-projectFiles().forEach(file=>{
-
-const tab=document.createElement("button");
-
-tab.className=
-"tab"+
-(file.id===state.currentFile?" active":"");
-
-tab.textContent=file.name;
-
-tab.onclick=()=>{
-state.currentFile=file.id;
-render();
-};
-
-box.appendChild(tab);
-
-});
+  return Array.isArray(project?.files)
+    ? project.files
+    : [];
 }
 
-function renderEditor(){
-
-const file=currentFile();
-
-if(!file){
-
-$("editorArea").style.display="none";
-$("editorEmpty").style.display="flex";
-
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-$("projectName").textContent=
-project?.name||"";
-
-$("pathSeparator").textContent="";
-$("fileName").textContent="";
-$("position").textContent="";
-
-return;
+function currentFile() {
+  return projectFiles().find(
+    file => file.id === state.currentFile
+  ) || null;
 }
 
-$("editorArea").style.display="flex";
-$("editorEmpty").style.display="none";
+function escape(value) {
+  return String(value).replace(/[&<>"']/g, char => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    };
 
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-$("projectName").textContent=
-project?.name||"";
-
-$("pathSeparator").textContent="/";
-$("fileName").textContent=file.name;
-
-$("code").value=file.content||"";
-
-updateLines();
-updatePosition();
-applySettings();
+    return entities[char];
+  });
 }
 
-function render(){
-renderProjects();
-renderFiles();
-renderTabs();
-renderEditor();
-persist();
+function fileIcon(name) {
+  const n = String(name).toLowerCase();
+
+  if (n.endsWith(".html") || n.endsWith(".htm")) return "◇";
+  if (n.endsWith(".css")) return "◆";
+  if (n.endsWith(".js") || n.endsWith(".mjs")) return "◈";
+  if (n.endsWith(".json")) return "{}";
+  if (n.endsWith(".md")) return "≡";
+  if (n.endsWith(".svg")) return "◇";
+  if (n.endsWith(".txt")) return "≡";
+
+  return "○";
 }
+
+function languageName(name) {
+  const n = String(name).toLowerCase();
+
+  if (n.endsWith(".html") || n.endsWith(".htm")) return "HTML";
+  if (n.endsWith(".css")) return "CSS";
+  if (n.endsWith(".js") || n.endsWith(".mjs")) return "JavaScript";
+  if (n.endsWith(".json")) return "JSON";
+  if (n.endsWith(".md")) return "Markdown";
+  if (n.endsWith(".svg")) return "SVG";
+
+  return "Plain Text";
+}
+
+/* -------------------------------------------------------
+   Rendering
+------------------------------------------------------- */
+
+function renderProjects() {
+  const box = $("projectList");
+
+  box.innerHTML = "";
+
+  if (!state.projects.length) {
+    box.innerHTML =
+      '<div class="emptySide">No projects yet.<br>Create one to begin.</div>';
+
+    return;
+  }
+
+  state.projects.forEach(project => {
+    const el = document.createElement("div");
+
+    el.className =
+      "item" +
+      (project.id === state.currentProject ? " active" : "");
+
+    el.innerHTML = `
+      <span class="itemIcon">▰</span>
+      <span class="itemText">${escape(project.name)}</span>
+      <span class="itemMeta">${project.files?.length || 0}</span>
+    `;
+
+    el.onclick = () => {
+      state.currentProject = project.id;
+      state.currentFile = project.files?.[0]?.id || null;
+
+      render();
+      closeMobileSidebar();
+    };
+
+    el.oncontextmenu = event => {
+      event.preventDefault();
+
+      openContext(
+        event.clientX,
+        event.clientY,
+        "project",
+        project.id
+      );
+    };
+
+    box.appendChild(el);
+  });
+}
+
+function renderFiles() {
+  const box = $("fileList");
+  const files = projectFiles();
+
+  const query = $("fileSearch").value
+    .trim()
+    .toLowerCase();
+
+  box.innerHTML = "";
+
+  if (!state.currentProject) {
+    $("fileTitle").textContent = "FILES";
+
+    box.innerHTML =
+      '<div class="emptySide">Select a project.</div>';
+
+    return;
+  }
+
+  $("fileTitle").textContent =
+    `FILES${files.length ? " · " + files.length : ""}`;
+
+  const filtered = files.filter(file => {
+    return (
+      !query ||
+      String(file.name)
+        .toLowerCase()
+        .includes(query)
+    );
+  });
+
+  if (!filtered.length) {
+    box.innerHTML = query
+      ? '<div class="emptySide">No matching files.</div>'
+      : '<div class="emptySide">No files yet.<br>Create a file to begin.</div>';
+
+    return;
+  }
+
+  filtered.forEach(file => {
+    const el = document.createElement("div");
+
+    el.className =
+      "item" +
+      (file.id === state.currentFile ? " active" : "");
+
+    el.innerHTML = `
+      <span class="itemIcon">${fileIcon(file.name)}</span>
+      <span class="itemText">${escape(file.name)}</span>
+      <span class="itemMeta">${(file.content || "").length}</span>
+    `;
+
+    el.onclick = () => {
+      state.currentFile = file.id;
+
+      render();
+      closeMobileSidebar();
+    };
+
+    el.oncontextmenu = event => {
+      event.preventDefault();
+
+      openContext(
+        event.clientX,
+        event.clientY,
+        "file",
+        file.id
+      );
+    };
+
+    box.appendChild(el);
+  });
+}
+
+function renderTabs() {
+  const box = $("tabs");
+
+  box.innerHTML = "";
+
+  projectFiles().forEach(file => {
+    const tab = document.createElement("button");
+
+    tab.className =
+      "tab" +
+      (file.id === state.currentFile ? " active" : "");
+
+    tab.title = file.name;
+
+    tab.innerHTML = `
+      <span class="tabIcon">${fileIcon(file.name)}</span>
+      <span>${escape(file.name)}</span>
+      <span class="tabClose" title="Close">×</span>
+    `;
+
+    tab.onclick = event => {
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.classList.contains("tabClose")
+      ) {
+        if (file.id === state.currentFile) {
+          const files = projectFiles();
+
+          const index = files.findIndex(
+            item => item.id === file.id
+          );
+
+          state.currentFile =
+            files[index + 1]?.id ||
+            files[index - 1]?.id ||
+            null;
+
+          render();
+        }
+
+        return;
+      }
+
+      state.currentFile = file.id;
+      render();
+    };
+
+    box.appendChild(tab);
+  });
+}
+
+function renderEditor() {
+  const file = currentFile();
+
+  if (!file) {
+    $("editorArea").style.display = "none";
+    $("editorEmpty").style.display = "flex";
+
+    $("projectName").textContent =
+      state.projects.find(
+        project => project.id === state.currentProject
+      )?.name || "";
+
+    $("pathSeparator").textContent = "";
+    $("fileName").textContent = "";
+    $("position").textContent = "";
+    $("language").textContent = "Plain Text";
+    $("charCount").textContent = "0 chars";
+
+    return;
+  }
+
+  $("editorArea").style.display = "flex";
+  $("editorEmpty").style.display = "none";
+
+  const project = state.projects.find(
+    project => project.id === state.currentProject
+  );
+
+  $("projectName").textContent = project?.name || "";
+  $("pathSeparator").textContent = "/";
+  $("fileName").textContent = file.name;
+
+  $("code").value = file.content || "";
+
+  $("language").textContent =
+    languageName(file.name);
+
+  updateLines();
+  updatePosition();
+  updateCharCount();
+  applySettings();
+}
+
+function render() {
+  renderProjects();
+  renderFiles();
+  renderTabs();
+  renderEditor();
+  persist();
+}
+
+/* -------------------------------------------------------
+   Modal
+------------------------------------------------------- */
 
 function openModal(
-title,
-description,
-placeholder,
-button,
-callback,
-value=""
-){
+  title,
+  description,
+  placeholder,
+  button,
+  callback,
+  value = ""
+) {
+  $("modalTitle").textContent = title;
+  $("modalDescription").textContent = description;
+  $("modalInput").placeholder = placeholder;
+  $("modalInput").value = value;
+  $("modalConfirm").textContent = button;
 
-$("modalTitle").textContent=title;
-$("modalDescription").textContent=description;
-$("modalInput").placeholder=placeholder;
-$("modalInput").value=value;
-$("modalConfirm").textContent=button;
+  $("modalLayer").classList.add("show");
 
-$("modalLayer").classList.add("show");
+  modalAction = callback;
 
-modalAction=callback;
-
-setTimeout(()=>{
-$("modalInput").focus();
-$("modalInput").select();
-},30);
+  setTimeout(() => {
+    $("modalInput").focus();
+    $("modalInput").select();
+  }, 30);
 }
 
-function closeModal(){
-
-$("modalLayer").classList.remove("show");
-
-modalAction=null;
+function closeModal() {
+  $("modalLayer").classList.remove("show");
+  modalAction = null;
 }
 
-$("modalConfirm").onclick=()=>{
+$("modalConfirm").onclick = () => {
+  const value = $("modalInput").value.trim();
 
-const value=
-$("modalInput").value.trim();
+  if (!value) return;
 
-if(!value)return;
+  const action = modalAction;
 
-const action=modalAction;
+  closeModal();
 
-closeModal();
-
-if(action){
-action(value);
-}
+  if (action) {
+    action(value);
+  }
 };
 
-$("modalCancel").onclick=closeModal;
+$("modalCancel").onclick = closeModal;
 
-$("modalInput").onkeydown=e=>{
+$("modalInput").onkeydown = event => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    $("modalConfirm").click();
+  }
 
-if(e.key==="Enter"){
-e.preventDefault();
-$("modalConfirm").click();
-}
-
-if(e.key==="Escape"){
-closeModal();
-}
+  if (event.key === "Escape") {
+    closeModal();
+  }
 };
 
-async function api(action,data={}){
+/* -------------------------------------------------------
+   API
+------------------------------------------------------- */
 
-const response=await fetch(API_URL,{
-method:"POST",
-headers:{
-"Content-Type":"text/plain;charset=utf-8"
-},
-body:JSON.stringify({
-action,
-...data
-})
+async function api(action, data = {}) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      action,
+      ...data
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error(
+      result.error || "API request failed"
+    );
+  }
+
+  return result;
+}
+
+/* -------------------------------------------------------
+   Projects
+------------------------------------------------------- */
+
+async function createProject() {
+  openModal(
+    "Create Project",
+    "Choose a name for your project.",
+    "Project name",
+    "Create",
+    async name => {
+      status("Creating project...");
+
+      try {
+        const result = await api("createProject", {
+          project: {
+            name,
+            files: []
+          }
+        });
+
+        if (!result.project) {
+          throw new Error(
+            "Invalid project response"
+          );
+        }
+
+        state.projects.push(result.project);
+        state.currentProject = result.project.id;
+        state.currentFile = null;
+
+        render();
+
+        status("Project created");
+        toast("Project created");
+      } catch (error) {
+        console.error(error);
+
+        status("Create failed", "error");
+        toast(error.message);
+      }
+    }
+  );
+}
+
+async function createFile() {
+  if (!state.currentProject) {
+    createProject();
+    return;
+  }
+
+  openModal(
+    "Create File",
+    "Add a new file to this project.",
+    "example.html",
+    "Create",
+    async name => {
+      status("Creating file...");
+
+      try {
+        const result = await api("createFile", {
+          projectId: state.currentProject,
+          file: {
+            name,
+            content: ""
+          }
+        });
+
+        const project = state.projects.find(
+          project =>
+            project.id === state.currentProject
+        );
+
+        if (!project) {
+          throw new Error("Project not found");
+        }
+
+        if (!Array.isArray(project.files)) {
+          project.files = [];
+        }
+
+        if (!result.file) {
+          throw new Error("Invalid file response");
+        }
+
+        project.files.push(result.file);
+
+        state.currentFile = result.file.id;
+
+        render();
+
+        status("File created");
+        toast("File created");
+      } catch (error) {
+        console.error(error);
+
+        status("Create failed", "error");
+        toast(error.message);
+      }
+    }
+  );
+}
+
+async function renameProject(id) {
+  const project = state.projects.find(
+    item => item.id === id
+  );
+
+  if (!project) return;
+
+  openModal(
+    "Rename Project",
+    "Change the project name.",
+    "Project name",
+    "Rename",
+    async name => {
+      status("Renaming project...");
+
+      try {
+        const result = await api(
+          "updateProject",
+          {
+            project: {
+              id: project.id,
+              name,
+              files: project.files || []
+            }
+          }
+        );
+
+        if (!result.project) {
+          throw new Error(
+            "Invalid project response"
+          );
+        }
+
+        const index = state.projects.findIndex(
+          item => item.id === project.id
+        );
+
+        if (index !== -1) {
+          state.projects[index] =
+            result.project;
+        }
+
+        render();
+
+        status("Project renamed");
+        toast("Project renamed");
+      } catch (error) {
+        console.error(error);
+
+        status("Rename failed", "error");
+        toast(error.message);
+      }
+    },
+    project.name
+  );
+}
+
+async function renameFile(id) {
+  const project = state.projects.find(
+    item => item.id === state.currentProject
+  );
+
+  const file = project?.files?.find(
+    item => item.id === id
+  );
+
+  if (!file) return;
+
+  openModal(
+    "Rename File",
+    "Change the file name.",
+    "filename",
+    "Rename",
+    async name => {
+      status("Renaming file...");
+
+      try {
+        const result = await api(
+          "renameFile",
+          {
+            projectId: project.id,
+            fileId: file.id,
+            name
+          }
+        );
+
+        if (!result.file) {
+          throw new Error(
+            "Invalid file response"
+          );
+        }
+
+        const index = project.files.findIndex(
+          item => item.id === file.id
+        );
+
+        if (index !== -1) {
+          project.files[index] = result.file;
+        }
+
+        render();
+
+        status("File renamed");
+        toast("File renamed");
+      } catch (error) {
+        console.error(error);
+
+        status("Rename failed", "error");
+        toast(error.message);
+      }
+    },
+    file.name
+  );
+}
+
+async function duplicateFile(id) {
+  const project = state.projects.find(
+    item => item.id === state.currentProject
+  );
+
+  const file = project?.files?.find(
+    item => item.id === id
+  );
+
+  if (!file) return;
+
+  status("Duplicating file...");
+
+  try {
+    const result = await api(
+      "duplicateFile",
+      {
+        projectId: project.id,
+        fileId: file.id
+      }
+    );
+
+    if (!result.file) {
+      throw new Error(
+        "Invalid file response"
+      );
+    }
+
+    if (!Array.isArray(project.files)) {
+      project.files = [];
+    }
+
+    project.files.push(result.file);
+
+    state.currentFile = result.file.id;
+
+    render();
+
+    status("File duplicated");
+    toast("File duplicated");
+  } catch (error) {
+    console.error(error);
+
+    status("Duplicate failed", "error");
+    toast(error.message);
+  }
+}
+
+async function deleteProject(id) {
+  const project = state.projects.find(
+    item => item.id === id
+  );
+
+  if (!project) return;
+
+  if (!confirm(`Delete "${project.name}"?`)) {
+    return;
+  }
+
+  status("Deleting project...");
+
+  try {
+    await api("deleteProject", {
+      id: project.id
+    });
+
+    state.projects = state.projects.filter(
+      item => item.id !== id
+    );
+
+    if (state.currentProject === id) {
+      state.currentProject =
+        state.projects[0]?.id || null;
+
+      state.currentFile =
+        state.projects[0]?.files?.[0]?.id ||
+        null;
+    }
+
+    render();
+
+    status("Project deleted");
+    toast("Project deleted");
+  } catch (error) {
+    console.error(error);
+
+    status("Delete failed", "error");
+    toast(error.message);
+  }
+}
+
+async function deleteFile(id) {
+  const project = state.projects.find(
+    item => item.id === state.currentProject
+  );
+
+  if (!project) return;
+
+  const file = project.files?.find(
+    item => item.id === id
+  );
+
+  if (!file) return;
+
+  if (!confirm(`Delete "${file.name}"?`)) {
+    return;
+  }
+
+  status("Deleting file...");
+
+  try {
+    await api("deleteFile", {
+      projectId: project.id,
+      fileId: file.id
+    });
+
+    project.files = project.files.filter(
+      item => item.id !== id
+    );
+
+    if (state.currentFile === id) {
+      state.currentFile =
+        project.files[0]?.id || null;
+    }
+
+    render();
+
+    status("File deleted");
+    toast("File deleted");
+  } catch (error) {
+    console.error(error);
+
+    status("Delete failed", "error");
+    toast(error.message);
+  }
+}
+
+/* -------------------------------------------------------
+   Context menu
+------------------------------------------------------- */
+
+function openContext(x, y, type, id) {
+  const layer = $("contextLayer");
+
+  layer.innerHTML = "";
+
+  const menu = document.createElement("div");
+
+  menu.className = "context";
+
+  menu.style.left =
+    Math.min(
+      x,
+      Math.max(5, window.innerWidth - 200)
+    ) + "px";
+
+  menu.style.top =
+    Math.min(
+      y,
+      Math.max(5, window.innerHeight - 220)
+    ) + "px";
+
+  const title = document.createElement("div");
+
+  title.className = "contextLabel";
+  title.textContent =
+    type === "project" ? "Project" : "File";
+
+  menu.appendChild(title);
+
+  const actions =
+    type === "project"
+      ? [
+          [
+            "↗",
+            "Open",
+            () => {
+              state.currentProject = id;
+
+              const project =
+                state.projects.find(
+                  item => item.id === id
+                );
+
+              state.currentFile =
+                project?.files?.[0]?.id ||
+                null;
+
+              render();
+            }
+          ],
+          [
+            "✎",
+            "Rename",
+            () => renameProject(id)
+          ],
+          [
+            "＋",
+            "New File",
+            () => {
+              state.currentProject = id;
+              createFile();
+            }
+          ],
+          [
+            "",
+            "Delete",
+            () => deleteProject(id)
+          ]
+        ]
+      : [
+          [
+            "↗",
+            "Open",
+            () => {
+              state.currentFile = id;
+              render();
+            }
+          ],
+          [
+            "✎",
+            "Rename",
+            () => renameFile(id)
+          ],
+          [
+            "⧉",
+            "Duplicate",
+            () => duplicateFile(id)
+          ],
+          [
+            "",
+            "Delete",
+            () => deleteFile(id)
+          ]
+        ];
+
+  actions.forEach(([icon, label, action]) => {
+    if (label === "Delete") {
+      const separator =
+        document.createElement("div");
+
+      separator.className = "contextSep";
+
+      menu.appendChild(separator);
+    }
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "contextItem" +
+      (label === "Delete" ? " delete" : "");
+
+    item.innerHTML = `
+      <span style="width:14px;text-align:center">
+        ${icon}
+      </span>
+      <span>${label}</span>
+    `;
+
+    item.onclick = () => {
+      layer.classList.remove("show");
+      action();
+    };
+
+    menu.appendChild(item);
+  });
+
+  layer.appendChild(menu);
+  layer.classList.add("show");
+}
+
+$("contextLayer").onclick = event => {
+  if (event.target === $("contextLayer")) {
+    $("contextLayer").classList.remove("show");
+  }
+};
+
+/* -------------------------------------------------------
+   Editor
+------------------------------------------------------- */
+
+function updateLines() {
+  const value = $("code").value;
+
+  if (!value) {
+    $("lines").textContent = "";
+    return;
+  }
+
+  const count = value.split("\n").length;
+
+  $("lines").textContent = Array.from(
+    { length: count },
+    (_, index) => index + 1
+  ).join("\n");
+}
+
+function updatePosition() {
+  const code = $("code");
+  const pos = code.selectionStart;
+
+  const text = code.value.slice(0, pos);
+
+  const line = text.split("\n").length;
+
+  const lastNewLine =
+    text.lastIndexOf("\n");
+
+  const col =
+    pos - (lastNewLine + 1) + 1;
+
+  $("position").textContent =
+    `Ln ${line}, Col ${col}`;
+}
+
+function updateCharCount() {
+  const value = $("code").value;
+
+  $("charCount").textContent =
+    `${value.length.toLocaleString()} chars`;
+}
+
+/* -------------------------------------------------------
+   Editor input
+------------------------------------------------------- */
+
+$("code").addEventListener("input", () => {
+  const file = currentFile();
+
+  if (!file) return;
+
+  file.content = $("code").value;
+
+  updateLines();
+  updatePosition();
+  updateCharCount();
+
+  status("Unsaved changes", "unsaved");
+
+  persist();
+
+  if (state.settings.autoRun) {
+    clearTimeout(autoRunTimer);
+
+    autoRunTimer = setTimeout(
+      runPreview,
+      350
+    );
+  }
 });
 
-if(!response.ok){
-throw new Error(
-"HTTP "+response.status
-);
-}
-
-const result=await response.json();
-
-if(!result.success){
-throw new Error(
-result.error||"API request failed"
-);
-}
-
-return result;
-}
-
-async function createProject(){
-
-openModal(
-"Create Project",
-"Choose a name for your project.",
-"Project name",
-"Create",
-async name=>{
-
-status("Creating project...");
-
-try{
-
-const result=
-await api(
-"createProject",
-{
-project:{
-name:name,
-files:[]
-}
-}
+["keyup", "click", "select"].forEach(
+  eventName => {
+    $("code").addEventListener(
+      eventName,
+      () => {
+        updatePosition();
+        updateCharCount();
+      }
+    );
+  }
 );
 
-const project=result.project;
-
-state.projects.push(project);
-
-state.currentProject=project.id;
-state.currentFile=null;
-
-render();
-
-status("Project created");
-toast("Project created");
-
-}catch(error){
-
-console.error(error);
-
-status("Create failed");
-toast(error.message);
-
-}
-}
-);
-}
-
-async function createFile(){
-
-if(!state.currentProject){
-
-createProject();
-
-return;
-}
-
-openModal(
-"Create File",
-"Add a new file to this project.",
-"example.html",
-"Create",
-async name=>{
-
-status("Creating file...");
-
-try{
-
-const result=
-await api(
-"createFile",
-{
-projectId:state.currentProject,
-file:{
-name:name,
-content:""
-}
-}
-);
-
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-if(!project)return;
-
-project.files.push(result.file);
-
-state.currentFile=result.file.id;
-
-render();
-
-status("File created");
-toast("File created");
-
-}catch(error){
-
-console.error(error);
-
-status("Create failed");
-toast(error.message);
-
-}
-}
-);
-}
-
-async function renameProject(id){
-
-const project=
-state.projects.find(
-x=>x.id===id
-);
-
-if(!project)return;
-
-openModal(
-"Rename Project",
-"Change the project name.",
-"Project name",
-"Rename",
-async name=>{
-
-status("Renaming project...");
-
-try{
-
-const updated={
-id:project.id,
-name:name,
-files:project.files
-};
-
-const result=
-await api(
-"updateProject",
-{
-project:updated
-}
-);
-
-const index=
-state.projects.findIndex(
-x=>x.id===project.id
-);
-
-if(index!==-1){
-state.projects[index]=result.project;
-}
-
-render();
-
-status("Project renamed");
-toast("Project renamed");
-
-}catch(error){
-
-console.error(error);
-
-status("Rename failed");
-toast(error.message);
-
-}
-},
-project.name
-);
-}
-
-async function renameFile(id){
-
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-const file=
-project?.files.find(
-x=>x.id===id
-);
-
-if(!file)return;
-
-openModal(
-"Rename File",
-"Change the file name.",
-"filename",
-"Rename",
-async name=>{
-
-status("Renaming file...");
-
-try{
-
-const result=
-await api(
-"renameFile",
-{
-projectId:project.id,
-fileId:file.id,
-name:name
-}
-);
-
-const index=
-project.files.findIndex(
-x=>x.id===file.id
-);
-
-if(index!==-1){
-project.files[index]=result.file;
-}
-
-render();
-
-status("File renamed");
-toast("File renamed");
-
-}catch(error){
-
-console.error(error);
-
-status("Rename failed");
-toast(error.message);
-
-}
-},
-file.name
-);
-}
-
-async function duplicateFile(id){
-
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-const file=
-project?.files.find(
-x=>x.id===id
-);
-
-if(!file)return;
-
-status("Duplicating file...");
-
-try{
-
-const result=
-await api(
-"duplicateFile",
-{
-projectId:project.id,
-fileId:file.id
-}
-);
-
-project.files.push(result.file);
-
-state.currentFile=result.file.id;
-
-render();
-
-status("File duplicated");
-toast("File duplicated");
-
-}catch(error){
-
-console.error(error);
-
-status("Duplicate failed");
-toast(error.message);
-
-}
-}
-
-async function deleteProject(id){
-
-const project=
-state.projects.find(
-x=>x.id===id
-);
-
-if(!project)return;
-
-if(!confirm(
-`Delete "${project.name}"?`
-)){
-return;
-}
-
-status("Deleting project...");
-
-try{
-
-await api(
-"deleteProject",
-{
-id:project.id
-}
-);
-
-state.projects=
-state.projects.filter(
-x=>x.id!==id
-);
-
-if(
-state.currentProject===id
-){
-
-state.currentProject=
-state.projects[0]?.id||null;
-
-state.currentFile=
-projectFiles()[0]?.id||null;
-}
-
-render();
-
-status("Project deleted");
-toast("Project deleted");
-
-}catch(error){
-
-console.error(error);
-
-status("Delete failed");
-toast(error.message);
-
-}
-}
-
-async function deleteFile(id){
-
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-if(!project)return;
-
-const file=
-project.files.find(
-x=>x.id===id
-);
-
-if(!file)return;
-
-if(!confirm(
-`Delete "${file.name}"?`
-)){
-return;
-}
-
-status("Deleting file...");
-
-try{
-
-await api(
-"deleteFile",
-{
-projectId:project.id,
-fileId:file.id
-}
-);
-
-project.files=
-project.files.filter(
-x=>x.id!==id
-);
-
-if(state.currentFile===id){
-
-state.currentFile=
-project.files[0]?.id||null;
-}
-
-render();
-
-status("File deleted");
-toast("File deleted");
-
-}catch(error){
-
-console.error(error);
-
-status("Delete failed");
-toast(error.message);
-
-}
-}
-
-function openContext(x,y,type,id){
-
-const layer=$("contextLayer");
-
-layer.innerHTML="";
-
-const menu=
-document.createElement("div");
-
-menu.className="context";
-
-menu.style.left=
-Math.min(
-x,
-window.innerWidth-190
-)+"px";
-
-menu.style.top=
-Math.min(
-y,
-window.innerHeight-180
-)+"px";
-
-const actions=
-type==="project"
-?[
-[
-"Open",
-()=>{
-state.currentProject=id;
-
-const project=
-state.projects.find(
-x=>x.id===id
-);
-
-state.currentFile=
-project?.files?.[0]?.id||null;
-
-render();
-}
-],
-[
-"Rename",
-()=>renameProject(id)
-],
-[
-"Delete",
-()=>deleteProject(id)
-]
-]
-:[
-[
-"Open",
-()=>{
-state.currentFile=id;
-render();
-}
-],
-[
-"Rename",
-()=>renameFile(id)
-],
-[
-"Duplicate",
-()=>duplicateFile(id)
-],
-[
-"Delete",
-()=>deleteFile(id)
-]
-];
-
-actions.forEach(
-([label,action])=>{
-
-const item=
-document.createElement("div");
-
-item.className=
-"contextItem"+
-(label==="Delete"?" delete":"");
-
-item.textContent=label;
-
-item.onclick=()=>{
-
-layer.classList.remove("show");
-
-action();
-
-};
-
-menu.appendChild(item);
-
+$("code").addEventListener("scroll", () => {
+  $("lines").scrollTop =
+    $("code").scrollTop;
 });
 
-layer.appendChild(menu);
-
-layer.classList.add("show");
-}
-
-$("contextLayer").onclick=e=>{
-
-if(
-e.target===
-$("contextLayer")
-){
-$("contextLayer")
-.classList.remove("show");
-}
-
-};
-
-function updateLines(){
-
-if(!$("code").value){
-
-$("lines").textContent="";
-
-return;
-}
-
-const count=
-$("code").value
-.split("\n")
-.length;
-
-$("lines").textContent=
-Array.from(
-{length:count},
-(_,i)=>i+1
-).join("\n");
-}
-
-function updatePosition(){
-
-const code=$("code");
-
-const pos=code.selectionStart;
-
-const text=
-code.value.slice(0,pos);
-
-const line=
-text.split("\n").length;
-
-const col=
-pos-
-(text.lastIndexOf("\n")+1)+1;
-
-$("position").textContent=
-`Ln ${line}, Col ${col}`;
-}
-
 $("code").addEventListener(
-"input",
-()=>{
+  "keydown",
+  event => {
+    if (event.key === "Tab") {
+      event.preventDefault();
 
-const file=currentFile();
+      const spaces = " ".repeat(
+        Number(state.settings.tabSize)
+      );
 
-if(!file)return;
+      const start =
+        $("code").selectionStart;
 
-file.content=
-$("code").value;
+      const end =
+        $("code").selectionEnd;
 
-updateLines();
-updatePosition();
+      const value = $("code").value;
 
-status("Unsaved changes");
+      $("code").value =
+        value.slice(0, start) +
+        spaces +
+        value.slice(end);
 
-persist();
+      $("code").selectionStart =
+        $("code").selectionEnd =
+          start + spaces.length;
 
-if(state.settings.autoRun){
+      const file = currentFile();
 
-clearTimeout(
-window.autoRunTimer
+      if (file) {
+        file.content = $("code").value;
+      }
+
+      updateLines();
+      updatePosition();
+      updateCharCount();
+
+      persist();
+
+      status(
+        "Unsaved changes",
+        "unsaved"
+      );
+    }
+
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "s"
+    ) {
+      event.preventDefault();
+      save();
+    }
+
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+      runPreview();
+    }
+  }
 );
 
-window.autoRunTimer=
-setTimeout(
-runPreview,
-300
-);
+/* -------------------------------------------------------
+   Save
+------------------------------------------------------- */
+
+async function save() {
+  const project = state.projects.find(
+    item => item.id === state.currentProject
+  );
+
+  if (!project) {
+    status("Nothing to save");
+    return;
+  }
+
+  const file = currentFile();
+
+  if (file) {
+    file.content = $("code").value;
+  }
+
+  persist();
+
+  await saveToAPI();
 }
 
-}
-);
+async function saveToAPI() {
+  if (isSaving) return;
 
-$("code").addEventListener(
-"keyup",
-updatePosition
-);
+  const project = state.projects.find(
+    item => item.id === state.currentProject
+  );
 
-$("code").addEventListener(
-"click",
-updatePosition
-);
+  if (!project) {
+    status("Nothing to save");
+    return;
+  }
 
-$("code").addEventListener(
-"scroll",
-()=>{
-$("lines").scrollTop=
-$("code").scrollTop;
-}
-);
+  isSaving = true;
 
-$("code").addEventListener(
-"keydown",
-e=>{
+  status("Saving...");
 
-if(e.key==="Tab"){
+  try {
+    const result = await api(
+      "saveProject",
+      {
+        project: {
+          id: project.id,
+          name: project.name,
+          files: project.files || []
+        }
+      }
+    );
 
-e.preventDefault();
+    if (!result.project) {
+      throw new Error(
+        "Invalid API response"
+      );
+    }
 
-const spaces=
-" ".repeat(
-Number(state.settings.tabSize)
-);
+    const index = state.projects.findIndex(
+      item => item.id === project.id
+    );
 
-const start=
-$("code").selectionStart;
+    if (index !== -1) {
+      state.projects[index] =
+        result.project;
+    }
 
-const end=
-$("code").selectionEnd;
+    state.currentProject =
+      result.project.id;
 
-$("code").value=
-$("code").value.slice(0,start)+
-spaces+
-$("code").value.slice(end);
+    const matchingFile =
+      result.project.files?.find(
+        file => file.id === state.currentFile
+      );
 
-$("code").selectionStart=
-$("code").selectionEnd=
-start+spaces.length;
+    state.currentFile =
+      matchingFile?.id ||
+      result.project.files?.[0]?.id ||
+      null;
 
-const file=currentFile();
+    persist();
 
-if(file){
-file.content=
-$("code").value;
-}
+    render();
 
-updateLines();
-updatePosition();
-persist();
+    status("Saved");
+    toast("Saved to Google Drive");
+  } catch (error) {
+    console.error(
+      "Save error:",
+      error
+    );
 
-status("Unsaved changes");
-}
+    status("Save failed", "error");
 
-if(
-(e.ctrlKey||e.metaKey)&&
-e.key.toLowerCase()==="s"
-){
-
-e.preventDefault();
-
-save();
-}
-
-if(
-(e.ctrlKey||e.metaKey)&&
-e.key==="Enter"
-){
-
-e.preventDefault();
-
-runPreview();
+    toast(
+      "Save failed: " +
+      error.message
+    );
+  } finally {
+    isSaving = false;
+  }
 }
 
-}
-);
+/* -------------------------------------------------------
+   Load from API
+------------------------------------------------------- */
 
-async function save(){
+async function loadFromAPI() {
+  status("Connecting...");
 
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
+  try {
+    const result =
+      await api("listProjects");
 
-if(!project){
+    if (!Array.isArray(result.projects)) {
+      throw new Error(
+        "Invalid project response"
+      );
+    }
 
-status("Nothing to save");
+    const previousProject =
+      state.currentProject;
 
-return;
-}
+    const previousFile =
+      state.currentFile;
 
-const file=currentFile();
+    state.projects =
+      result.projects;
 
-if(file){
-file.content=
-$("code").value;
-}
+    if (
+      previousProject &&
+      state.projects.some(
+        project =>
+          project.id === previousProject
+      )
+    ) {
+      state.currentProject =
+        previousProject;
+    } else {
+      state.currentProject =
+        state.projects[0]?.id || null;
+    }
 
-persist();
+    const files = projectFiles();
 
-await saveToAPI();
-}
+    if (
+      previousFile &&
+      files.some(
+        file => file.id === previousFile
+      )
+    ) {
+      state.currentFile =
+        previousFile;
+    } else {
+      state.currentFile =
+        files[0]?.id || null;
+    }
 
-async function saveToAPI(){
+    persist();
+    render();
 
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
+    status("Connected");
+    toast("Google Drive connected");
+  } catch (error) {
+    console.error(
+      "Load error:",
+      error
+    );
 
-if(!project){
+    status("Offline", "error");
 
-status("Nothing to save");
-
-return;
-}
-
-status("Saving...");
-
-try{
-
-const result=
-await api(
-"saveProject",
-{
-project:{
-id:project.id,
-name:project.name,
-files:project.files
-}
-}
-);
-
-if(!result.project){
-throw new Error(
-"Invalid API response"
-);
-}
-
-const oldProjectId=
-project.id;
-
-const index=
-state.projects.findIndex(
-x=>x.id===oldProjectId
-);
-
-if(index!==-1){
-
-state.projects[index]=
-result.project;
-
-state.currentProject=
-result.project.id;
-
-const matchingFile=
-result.project.files.find(
-f=>f.id===state.currentFile
-);
-
-if(matchingFile){
-state.currentFile=
-matchingFile.id;
-}else{
-state.currentFile=
-result.project.files[0]?.id||null;
+    toast(
+      "Could not connect to Google Drive"
+    );
+  }
 }
 
+/* -------------------------------------------------------
+   Preview
+------------------------------------------------------- */
+
+function extractBody(html) {
+  const match = String(html || "").match(
+    /<body[^>]*>([\s\S]*?)<\/body>/i
+  );
+
+  return match
+    ? match[1]
+    : String(html || "");
 }
 
-persist();
+function extractHead(html) {
+  const match = String(html || "").match(
+    /<head[^>]*>([\s\S]*?)<\/head>/i
+  );
 
-render();
-
-status("Saved");
-toast("Saved to Google Drive");
-
-}catch(error){
-
-console.error(
-"Save error:",
-error
-);
-
-status("Save failed");
-
-toast(
-"Save failed: "+error.message
-);
-
-}
+  return match
+    ? match[1]
+    : "";
 }
 
-async function loadFromAPI(){
+function runPreview() {
+  const project = state.projects.find(
+    item => item.id === state.currentProject
+  );
 
-status("Connecting...");
+  if (!project) {
+    $("preview").srcdoc = "";
 
-try{
+    status(
+      "Create a project first"
+    );
 
-const result=
-await api(
-"listProjects"
-);
+    return;
+  }
 
-if(
-!Array.isArray(result.projects)
-){
+  const files = Array.isArray(project.files)
+    ? project.files
+    : [];
 
-throw new Error(
-"Invalid project response"
-);
+  const htmlFile = files.find(
+    file => /\.html?$/i.test(file.name)
+  );
 
-}
+  const cssFiles = files.filter(
+    file => /\.css$/i.test(file.name)
+  );
 
-const previousProject=
-state.currentProject;
+  const jsFiles = files.filter(
+    file => /\.m?js$/i.test(file.name)
+  );
 
-const previousFile=
-state.currentFile;
+  if (!htmlFile) {
+    $("preview").srcdoc = "";
 
-state.projects=
-result.projects;
+    status(
+      "No HTML file to preview"
+    );
 
-if(
-previousProject &&
-state.projects.some(
-x=>x.id===previousProject
-)
-){
+    return;
+  }
 
-state.currentProject=
-previousProject;
+  const head = extractHead(
+    htmlFile.content || ""
+  );
 
-}else{
+  const body = extractBody(
+    htmlFile.content || ""
+  );
 
-state.currentProject=
-state.projects[0]?.id||null;
+  const css = cssFiles
+    .map(file => file.content || "")
+    .join("\n");
 
-}
+  const js = jsFiles
+    .map(file => file.content || "")
+    .join("\n")
+    .replace(/<\/script>/gi, "<\\/script>");
 
-const files=projectFiles();
-
-if(
-previousFile &&
-files.some(
-x=>x.id===previousFile
-)
-){
-
-state.currentFile=
-previousFile;
-
-}else{
-
-state.currentFile=
-files[0]?.id||null;
-
-}
-
-persist();
-
-render();
-
-status("Connected");
-toast("Google Drive connected");
-
-}catch(error){
-
-console.error(
-"Load error:",
-error
-);
-
-status("Offline");
-
-toast(
-"Could not connect to Google Drive"
-);
-
-}
-}
-
-function extractBody(html){
-
-const match=
-html.match(
-/<body[^>]*>([\s\S]*?)<\/body>/i
-);
-
-return match
-?match[1]
-:html;
-}
-
-function extractHead(html){
-
-const match=
-html.match(
-/<head[^>]*>([\s\S]*?)<\/head>/i
-);
-
-return match
-?match[1]
-:"";
-}
-
-function runPreview(){
-
-const project=
-state.projects.find(
-x=>x.id===state.currentProject
-);
-
-if(!project){
-
-$("preview").srcdoc="";
-
-status("Create a project first");
-
-return;
-}
-
-const htmlFile=
-project.files.find(
-x=>/\.html?$/i.test(x.name)
-);
-
-const cssFiles=
-project.files.filter(
-x=>/\.css$/i.test(x.name)
-);
-
-const jsFiles=
-project.files.filter(
-x=>/\.js$/i.test(x.name)
-);
-
-if(!htmlFile){
-
-$("preview").srcdoc="";
-
-status("No HTML file to preview");
-
-return;
-}
-
-const head=
-extractHead(
-htmlFile.content||""
-);
-
-const body=
-extractBody(
-htmlFile.content||""
-);
-
-const css=
-cssFiles
-.map(x=>x.content)
-.join("\n");
-
-const js=
-jsFiles
-.map(x=>x.content)
-.join("\n")
-.replace(
-/<\/script>/gi,
-"<\\/script>"
-);
-
-$("preview").srcdoc=`
+  const srcdoc = `
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-${head}
-<style>${css}</style>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+  ${head}
+  <style>
+    ${css}
+  </style>
 </head>
 <body>
-${body}
-<script>${js}<\/script>
+  ${body}
+
+  <script>
+    ${js}
+  <\/script>
 </body>
 </html>
 `;
 
-status("Preview updated");
+  $("preview").srcdoc = srcdoc;
+
+  status("Preview updated");
 }
 
-$("run").onclick=runPreview;
+/* -------------------------------------------------------
+   Settings
+------------------------------------------------------- */
 
-$("refresh").onclick=runPreview;
+function applySettings() {
+  const settings = state.settings;
 
-$("newProject").onclick=createProject;
+  $("code").style.fontSize =
+    settings.fontSize + "px";
 
-$("newFile").onclick=createFile;
+  $("code").style.tabSize =
+    settings.tabSize;
 
-$("emptyFile").onclick=createFile;
+  $("code").style.whiteSpace =
+    settings.wordWrap
+      ? "pre-wrap"
+      : "pre";
 
-$("save").onclick=save;
+  $("lines").style.display =
+    settings.lineNumbers
+      ? "block"
+      : "none";
 
-$("menu").onclick=()=>{
-$("sidebar")
-.classList.toggle("open");
-};
+  $("fontSize").value =
+    settings.fontSize;
 
-$("settingsButton").onclick=()=>{
-$("settings")
-.classList.add("open");
-};
+  $("tabSize").value =
+    settings.tabSize;
 
-$("closeSettings").onclick=()=>{
-$("settings")
-.classList.remove("open");
-};
+  $("theme").value =
+    settings.theme;
 
-$("more").onclick=()=>{
+  $("autoRun").checked =
+    settings.autoRun;
 
-if(!state.currentProject){
+  $("lineNumbers").checked =
+    settings.lineNumbers;
 
-createProject();
+  $("wordWrap").checked =
+    settings.wordWrap;
 
-return;
+  const root =
+    document.documentElement;
+
+  if (settings.theme === "light") {
+    root.style.setProperty(
+      "--bg",
+      "#f6f8fa"
+    );
+
+    root.style.setProperty(
+      "--panel",
+      "#fff"
+    );
+
+    root.style.setProperty(
+      "--panel2",
+      "#f1f3f5"
+    );
+
+    root.style.setProperty(
+      "--panel3",
+      "#e8ebef"
+    );
+
+    root.style.setProperty(
+      "--editor",
+      "#fff"
+    );
+
+    root.style.setProperty(
+      "--border",
+      "#d0d7de"
+    );
+
+    root.style.setProperty(
+      "--border2",
+      "#afb8c1"
+    );
+
+    root.style.setProperty(
+      "--text",
+      "#1f2328"
+    );
+
+    root.style.setProperty(
+      "--muted",
+      "#656d76"
+    );
+
+    root.style.setProperty(
+      "--muted2",
+      "#8c959f"
+    );
+  } else if (
+    settings.theme === "midnight"
+  ) {
+    root.style.setProperty(
+      "--bg",
+      "#05070a"
+    );
+
+    root.style.setProperty(
+      "--panel",
+      "#080c11"
+    );
+
+    root.style.setProperty(
+      "--panel2",
+      "#0c1118"
+    );
+
+    root.style.setProperty(
+      "--panel3",
+      "#111923"
+    );
+
+    root.style.setProperty(
+      "--editor",
+      "#06090d"
+    );
+
+    root.style.setProperty(
+      "--border",
+      "#18212c"
+    );
+
+    root.style.setProperty(
+      "--border2",
+      "#273342"
+    );
+
+    root.style.setProperty(
+      "--text",
+      "#dbeafe"
+    );
+
+    root.style.setProperty(
+      "--muted",
+      "#64748b"
+    );
+
+    root.style.setProperty(
+      "--muted2",
+      "#475569"
+    );
+  } else {
+    root.style.setProperty(
+      "--bg",
+      "#080b10"
+    );
+
+    root.style.setProperty(
+      "--panel",
+      "#0d1118"
+    );
+
+    root.style.setProperty(
+      "--panel2",
+      "#111720"
+    );
+
+    root.style.setProperty(
+      "--panel3",
+      "#151c26"
+    );
+
+    root.style.setProperty(
+      "--editor",
+      "#080b10"
+    );
+
+    root.style.setProperty(
+      "--border",
+      "#202833"
+    );
+
+    root.style.setProperty(
+      "--border2",
+      "#303b49"
+    );
+
+    root.style.setProperty(
+      "--text",
+      "#edf3f9"
+    );
+
+    root.style.setProperty(
+      "--muted",
+      "#7e8a99"
+    );
+
+    root.style.setProperty(
+      "--muted2",
+      "#566171"
+    );
+  }
 }
 
-openContext(
-window.innerWidth-190,
-60,
-"project",
-state.currentProject
+$("fontSize").onchange = event => {
+  state.settings.fontSize = Math.max(
+    10,
+    Math.min(
+      24,
+      Number(event.target.value) || 12
+    )
+  );
+
+  applySettings();
+  persist();
+};
+
+$("tabSize").onchange = event => {
+  state.settings.tabSize =
+    Number(event.target.value) || 2;
+
+  applySettings();
+  persist();
+};
+
+$("theme").onchange = event => {
+  state.settings.theme =
+    event.target.value;
+
+  applySettings();
+  persist();
+};
+
+$("autoRun").onchange = event => {
+  state.settings.autoRun =
+    event.target.checked;
+
+  persist();
+
+  if (state.settings.autoRun) {
+    runPreview();
+  }
+};
+
+$("lineNumbers").onchange = event => {
+  state.settings.lineNumbers =
+    event.target.checked;
+
+  applySettings();
+  persist();
+};
+
+$("wordWrap").onchange = event => {
+  state.settings.wordWrap =
+    event.target.checked;
+
+  applySettings();
+  persist();
+};
+
+/* -------------------------------------------------------
+   Buttons
+------------------------------------------------------- */
+
+$("run").onclick = runPreview;
+
+$("refresh").onclick = runPreview;
+
+$("newProject").onclick =
+  createProject;
+
+$("newFile").onclick =
+  createFile;
+
+$("emptyFile").onclick =
+  createFile;
+
+$("save").onclick =
+  save;
+
+$("refreshProjects").onclick =
+  loadFromAPI;
+
+$("menu").onclick = () => {
+  $("sidebar").classList.toggle(
+    "open"
+  );
+};
+
+$("settingsButton").onclick = () => {
+  $("settings").classList.add(
+    "open"
+  );
+};
+
+$("closeSettings").onclick = () => {
+  $("settings").classList.remove(
+    "open"
+  );
+};
+
+$("fileSearch").addEventListener(
+  "input",
+  renderFiles
 );
 
+$("more").onclick = () => {
+  if (!state.currentProject) {
+    createProject();
+    return;
+  }
+
+  openContext(
+    window.innerWidth - 200,
+    58,
+    "project",
+    state.currentProject
+  );
 };
+
+/* -------------------------------------------------------
+   Preview devices
+------------------------------------------------------- */
 
 document
-.querySelectorAll("[data-device]")
-.forEach(button=>{
+  .querySelectorAll("[data-device]")
+  .forEach(button => {
+    button.onclick = () => {
+      document
+        .querySelectorAll("[data-device]")
+        .forEach(item =>
+          item.classList.remove(
+            "active"
+          )
+        );
 
-button.onclick=()=>{
+      button.classList.add("active");
 
-const type=
-button.dataset.device;
+      const type =
+        button.dataset.device;
 
-const frame=$("preview");
+      const frame = $("preview");
 
-if(type==="desktop"){
+      if (type === "desktop") {
+        frame.style.width = "100%";
+        frame.style.height = "100%";
 
-frame.style.width="100%";
-frame.style.height="100%";
+        $("previewBody").style.padding =
+          "0";
+      }
 
-}
+      if (type === "tablet") {
+        frame.style.width = "768px";
+        frame.style.height = "1024px";
 
-if(type==="tablet"){
+        $("previewBody").style.padding =
+          "20px";
+      }
 
-frame.style.width="768px";
-frame.style.height="1024px";
+      if (type === "mobile") {
+        frame.style.width = "390px";
+        frame.style.height = "844px";
 
-}
+        $("previewBody").style.padding =
+          "20px";
+      }
+    };
+  });
 
-if(type==="mobile"){
+/* -------------------------------------------------------
+   Fullscreen
+------------------------------------------------------- */
 
-frame.style.width="390px";
-frame.style.height="844px";
+$("fullscreen").onclick = async () => {
+  const preview = $("preview");
 
-}
-
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else if (preview.requestFullscreen) {
+      await preview.requestFullscreen();
+    } else {
+      toast(
+        "Fullscreen is not available"
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    toast(
+      "Fullscreen is not available"
+    );
+  }
 };
 
-});
+/* -------------------------------------------------------
+   Editor resizer
+------------------------------------------------------- */
 
-$("resizer")
-.addEventListener(
-"mousedown",
-()=>{
-resizeActive=true;
-document.body.style.cursor=
-"col-resize";
-}
+$("resizer").addEventListener(
+  "mousedown",
+  () => {
+    resizeActive = true;
+
+    $("resizer").classList.add(
+      "active"
+    );
+
+    document.body.style.cursor =
+      "col-resize";
+
+    document.body.style.userSelect =
+      "none";
+  }
 );
 
 document.addEventListener(
-"mousemove",
-e=>{
+  "mousemove",
+  event => {
+    if (!resizeActive) return;
 
-if(!resizeActive)return;
+    const workspace =
+      document.querySelector(
+        ".workspace"
+      );
 
-const workspace=
-document.querySelector(
-".workspace"
-);
+    const rect =
+      workspace.getBoundingClientRect();
 
-const rect=
-workspace.getBoundingClientRect();
+    let width =
+      event.clientX - rect.left;
 
-let width=
-e.clientX-rect.left;
+    width = Math.max(
+      300,
+      Math.min(
+        rect.width - 250,
+        width
+      )
+    );
 
-width=
-Math.max(
-300,
-Math.min(
-rect.width-250,
-width
-)
-);
-
-$("editorPanel")
-.style.width=
-width+"px";
-
-}
+    $("editorPanel").style.width =
+      width + "px";
+  }
 );
 
 document.addEventListener(
-"mouseup",
-()=>{
-resizeActive=false;
-document.body.style.cursor="";
-}
+  "mouseup",
+  () => {
+    resizeActive = false;
+
+    $("resizer").classList.remove(
+      "active"
+    );
+
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  }
 );
 
-function applySettings(){
-
-const s=state.settings;
-
-$("code").style.fontSize=
-s.fontSize+"px";
-
-$("code").style.tabSize=
-s.tabSize;
-
-$("code").style.whiteSpace=
-s.wordWrap
-?"pre-wrap"
-:"pre";
-
-$("lines").style.display=
-s.lineNumbers
-?"block"
-:"none";
-
-$("fontSize").value=
-s.fontSize;
-
-$("tabSize").value=
-s.tabSize;
-
-$("theme").value=
-s.theme;
-
-$("autoRun").checked=
-s.autoRun;
-
-$("lineNumbers").checked=
-s.lineNumbers;
-
-$("wordWrap").checked=
-s.wordWrap;
-
-if(s.theme==="light"){
-
-document.documentElement
-.style.setProperty(
-"--bg","#f6f8fa"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel","#fff"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel2","#f1f3f5"
-);
-
-document.documentElement
-.style.setProperty(
-"--editor","#fff"
-);
-
-document.documentElement
-.style.setProperty(
-"--border","#d0d7de"
-);
-
-document.documentElement
-.style.setProperty(
-"--border2","#afb8c1"
-);
-
-document.documentElement
-.style.setProperty(
-"--text","#1f2328"
-);
-
-document.documentElement
-.style.setProperty(
-"--muted","#656d76"
-);
-
-}else if(
-s.theme==="midnight"
-){
-
-document.documentElement
-.style.setProperty(
-"--bg","#05070a"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel","#080c11"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel2","#0c1118"
-);
-
-document.documentElement
-.style.setProperty(
-"--editor","#06090d"
-);
-
-document.documentElement
-.style.setProperty(
-"--border","#18212c"
-);
-
-document.documentElement
-.style.setProperty(
-"--border2","#273342"
-);
-
-document.documentElement
-.style.setProperty(
-"--text","#dbeafe"
-);
-
-document.documentElement
-.style.setProperty(
-"--muted","#64748b"
-);
-
-}else{
-
-document.documentElement
-.style.setProperty(
-"--bg","#090b0f"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel","#0e1117"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel2","#12161d"
-);
-
-document.documentElement
-.style.setProperty(
-"--editor","#0a0d12"
-);
-
-document.documentElement
-.style.setProperty(
-"--border","#242a33"
-);
-
-document.documentElement
-.style.setProperty(
-"--border2","#343c48"
-);
-
-document.documentElement
-.style.setProperty(
-"--text","#e7edf4"
-);
-
-document.documentElement
-.style.setProperty(
-"--muted","#7d8794"
-);
-
-}
-}
-
-$("fontSize").onchange=e=>{
-
-state.settings.fontSize=
-Math.max(
-10,
-Math.min(
-24,
-Number(e.target.value)||12
-)
-);
-
-applySettings();
-persist();
-
-};
-
-$("tabSize").onchange=e=>{
-
-state.settings.tabSize=
-Number(e.target.value)||2;
-
-applySettings();
-persist();
-
-};
-
-$("theme").onchange=e=>{
-
-state.settings.theme=
-e.target.value;
-
-applySettings();
-persist();
-
-};
-
-$("autoRun").onchange=e=>{
-
-state.settings.autoRun=
-e.target.checked;
-
-persist();
-
-};
-
-$("lineNumbers").onchange=e=>{
-
-state.settings.lineNumbers=
-e.target.checked;
-
-applySettings();
-persist();
-
-};
-
-$("wordWrap").onchange=e=>{
-
-state.settings.wordWrap=
-e.target.checked;
-
-applySettings();
-persist();
-
-};
+/* -------------------------------------------------------
+   Keyboard shortcuts
+------------------------------------------------------- */
 
 document.addEventListener(
-"keydown",
-e=>{
+  "keydown",
+  event => {
+    if (sessionStorage.getItem("codespace-auth") !== "1") return;
 
-if(
-(e.ctrlKey||e.metaKey)&&
-e.key.toLowerCase()==="n"
-){
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "n"
+    ) {
+      event.preventDefault();
+      createFile();
+    }
 
-e.preventDefault();
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "p"
+    ) {
+      event.preventDefault();
+      createProject();
+    }
 
-createFile();
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "b"
+    ) {
+      event.preventDefault();
 
+      $("sidebar").classList.toggle(
+        "open"
+      );
+    }
+
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "j"
+    ) {
+      event.preventDefault();
+      runPreview();
+    }
+
+    if (event.key === "Escape") {
+      closeModal();
+
+      $("contextLayer").classList.remove(
+        "show"
+      );
+
+      $("settings").classList.remove(
+        "open"
+      );
+    }
+  }
+);
+
+/* -------------------------------------------------------
+   Mobile sidebar
+------------------------------------------------------- */
+
+function closeMobileSidebar() {
+  if (window.innerWidth <= 700) {
+    $("sidebar").classList.remove(
+      "open"
+    );
+  }
 }
 
-if(
-(e.ctrlKey||e.metaKey)&&
-e.key.toLowerCase()==="p"
-){
+/* -------------------------------------------------------
+   Window events
+------------------------------------------------------- */
 
-e.preventDefault();
-
-createProject();
-
-}
-
-if(e.key==="Escape"){
-
-closeModal();
-
-$("contextLayer")
-.classList.remove("show");
-
-$("settings")
-.classList.remove("open");
-
-}
-
-}
+window.addEventListener(
+  "resize",
+  () => {
+    updateLines();
+    updatePosition();
+  }
 );
 
 window.addEventListener(
-"beforeunload",
-()=>{
-const file=currentFile();
+  "beforeunload",
+  () => {
+    const file = currentFile();
 
-if(file){
-file.content=$("code").value;
-}
-persist();
-});
+    if (file) {
+      file.content = $("code").value;
+      persist();
+    }
+  }
+);
 
-window.addEventListener("load", async () => {
+/* -------------------------------------------------------
+   Authorization-gated initialization
+------------------------------------------------------- */
+
+async function initializeCodeSpace() {
   restore();
+
   applySettings();
   render();
 
-  // Load projects from Google Drive.
   await loadFromAPI();
 
-  // Show the current file in the editor after loading.
   const file = currentFile();
 
   if (file) {
     $("code").value = file.content || "";
+
     updateLines();
     updatePosition();
+    updateCharCount();
+
     runPreview();
   }
-});
+}
 
-// Keep the editor line numbers synchronized when the window changes.
-window.addEventListener("resize", () => {
-  updateLines();
-  updatePosition();
-});
-
-// Close the mobile sidebar after selecting a file.
-$("fileList").addEventListener("click", () => {
-  if (window.innerWidth <= 700) {
-    $("sidebar").classList.remove("open");
+window.addEventListener("load", () => {
+  if (sessionStorage.getItem("codespace-auth") === "1") {
+    openCodeSpace();
+  } else {
+    $("authScreen").classList.remove("hidden");
+    $("codeSpaceApp").classList.remove("authenticated");
+    $("authUser").focus();
   }
 });
-
-// Close the mobile sidebar after selecting a project.
-$("projectList").addEventListener("click", () => {
-  if (window.innerWidth <= 700) {
-    $("sidebar").classList.remove("open");
-  }
-});
-
-// Prevent accidental loss of unsaved editor changes.
-window.addEventListener("beforeunload", e => {
-  const file = currentFile();
-
-  if (file && file.content !== $("code").value) {
-    file.content = $("code").value;
-    persist();
-  }
-});
-
-// Initial UI setup.
-applySettings();
-render();
 </script>
-
 </body>
 </html>
