@@ -6,73 +6,102 @@
 <meta name="theme-color" content="#166534">
 <title>DataCards Pro</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-
 <style>
 :root{
-    --bg:#f1f5f9;--surface:#ffffff;--surface-2:#f8fafc;--text:#0f172a;
-    --muted:#64748b;--border:#e2e8f0;--primary:#166534;--primary-2:#15803d;
-    --primary-soft:#dcfce7;--danger:#dc2626;--danger-soft:#fee2e2;
-    --blue:#2563eb;--blue-soft:#dbeafe;--amber:#d97706;--amber-soft:#fef3c7;
-    --shadow:0 8px 30px rgba(15,23,42,.07);--radius:16px;
+--bg:#f1f5f9;--surface:#fff;--surface-2:#f8fafc;--text:#0f172a;--muted:#64748b;
+--border:#e2e8f0;--primary:#166534;--primary-2:#15803d;--primary-soft:#dcfce7;
+--danger:#dc2626;--danger-soft:#fee2e2;--blue:#2563eb;--blue-soft:#dbeafe;
+--amber:#d97706;--amber-soft:#fef3c7;--shadow:0 8px 30px rgba(15,23,42,.07);--radius:16px
 }
 [data-theme="dark"]{
-    --bg:#0b1220;--surface:#111827;--surface-2:#172033;--text:#f8fafc;
-    --muted:#94a3b8;--border:#263449;--primary:#4ade80;--primary-2:#22c55e;
-    --primary-soft:rgba(74,222,128,.12);--danger:#f87171;--danger-soft:rgba(248,113,113,.12);
-    --blue:#60a5fa;--blue-soft:rgba(96,165,250,.12);--amber:#fbbf24;--amber-soft:rgba(251,191,36,.12);
-    --shadow:0 10px 35px rgba(0,0,0,.25);
+--bg:#0b1220;--surface:#111827;--surface-2:#172033;--text:#f8fafc;--muted:#94a3b8;
+--border:#263449;--primary:#4ade80;--primary-2:#22c55e;--primary-soft:rgba(74,222,128,.12);
+--danger:#f87171;--danger-soft:rgba(248,113,113,.12);--blue:#60a5fa;--blue-soft:rgba(96,165,250,.12);
+--amber:#fbbf24;--amber-soft:rgba(251,191,36,.12);--shadow:0 10px 35px rgba(0,0,0,.25)
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-    min-height:100vh;background:var(--bg);color:var(--text);
-    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+min-height:100vh;background:var(--bg);color:var(--text);
+font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif
 }
 button,input,select{font:inherit}
 button{border:0}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(37,99,235,.25);outline-offset:2px}
-.app{width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:40px}
 
-/* Header */
+#loginScreen{
+position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+padding:20px;background:linear-gradient(135deg,#052e16,#166534,#15803d)
+}
+.login-box{
+width:100%;max-width:400px;background:var(--surface);border-radius:22px;padding:30px;
+box-shadow:0 25px 80px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)
+}
+.login-logo{
+width:58px;height:58px;border-radius:16px;margin:0 auto 18px;
+display:grid;place-items:center;color:#fff;
+background:linear-gradient(135deg,#166534,#22c55e);
+box-shadow:0 10px 25px rgba(22,101,52,.3)
+}
+.login-logo .material-icons-outlined{font-size:30px}
+.login-box h1{text-align:center;font-size:25px}
+.login-box>p{text-align:center;color:var(--muted);font-size:13px;margin:7px 0 25px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;color:var(--muted)}
+.login-input{
+width:100%;height:46px;border:1px solid var(--border);border-radius:11px;
+background:var(--surface-2);color:var(--text);padding:0 13px;outline:none
+}
+.login-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.login-button{
+width:100%;height:46px;border-radius:11px;background:var(--primary);color:#fff;
+font-weight:700;cursor:pointer;margin-top:5px;display:flex;align-items:center;justify-content:center;gap:7px
+}
+.login-button:hover{background:var(--primary-2)}
+.login-error{
+display:none;color:var(--danger);background:var(--danger-soft);padding:10px;border-radius:9px;
+font-size:12px;text-align:center;margin-bottom:12px
+}
+.login-status{text-align:center;color:var(--muted);font-size:11px;margin-top:15px}
+
+.app{display:none;width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:40px}
 .header{
-    position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
-    padding:15px 20px;background:color-mix(in srgb,var(--surface) 92%,transparent);
-    backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+padding:15px 20px;background:color-mix(in srgb,var(--surface) 92%,transparent);
+backdrop-filter:blur(16px);border-bottom:1px solid var(--border)
 }
 .brand{display:flex;align-items:center;gap:11px}
 .brand-icon{
-    width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));
-    color:white;display:grid;place-items:center;box-shadow:0 6px 16px rgba(22,101,52,.22)
+width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));
+color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(22,101,52,.22)
 }
 .brand h1{font-size:18px;line-height:1.1}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
 .header-actions{display:flex;gap:8px}
 .icon-btn{
-    width:40px;height:40px;border-radius:11px;background:var(--surface-2);color:var(--text);
-    display:grid;place-items:center;cursor:pointer;border:1px solid var(--border);transition:.2s
+width:40px;height:40px;border-radius:11px;background:var(--surface-2);color:var(--text);
+display:grid;place-items:center;cursor:pointer;border:1px solid var(--border);transition:.2s
 }
 .icon-btn:hover{transform:translateY(-1px);border-color:var(--primary);color:var(--primary)}
 .icon-btn .material-icons-outlined{font-size:20px}
 
-/* Main */
 .main{padding:20px}
 .hero{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:18px}
 .hero h2{font-size:25px}.hero p{color:var(--muted);font-size:13px;margin-top:5px}
 .primary-btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--primary);
-    color:white;border-radius:11px;padding:11px 15px;font-weight:700;cursor:pointer;transition:.2s;
-    box-shadow:0 6px 15px rgba(22,101,52,.18)
+display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--primary);
+color:#fff;border-radius:11px;padding:11px 15px;font-weight:700;cursor:pointer;transition:.2s;
+box-shadow:0 6px 15px rgba(22,101,52,.18)
 }
 .primary-btn:hover{background:var(--primary-2);transform:translateY(-1px)}
 .secondary-btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--surface);
-    color:var(--text);border:1px solid var(--border);border-radius:11px;padding:10px 13px;font-weight:600;cursor:pointer
+display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--surface);
+color:var(--text);border:1px solid var(--border);border-radius:11px;padding:10px 13px;font-weight:600;cursor:pointer
 }
 
-/* Stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .stat{
-    background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;
-    box-shadow:var(--shadow);display:flex;align-items:center;gap:12px
+background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;
+box-shadow:var(--shadow);display:flex;align-items:center;gap:12px
 }
 .stat-icon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--primary-soft);color:var(--primary)}
 .stat:nth-child(2) .stat-icon{background:var(--blue-soft);color:var(--blue)}
@@ -80,15 +109,14 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .stat:nth-child(4) .stat-icon{background:var(--danger-soft);color:var(--danger)}
 .stat strong{font-size:20px;display:block}.stat span{font-size:11px;color:var(--muted)}
 
-/* Toolbar */
 .toolbar{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    box-shadow:var(--shadow);padding:12px;margin-bottom:18px
+background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+box-shadow:var(--shadow);padding:12px;margin-bottom:18px
 }
 .toolbar-row{display:flex;gap:9px}
 .search{
-    flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface-2);
-    border:1px solid var(--border);border-radius:11px;padding:0 11px
+flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface-2);
+border:1px solid var(--border);border-radius:11px;padding:0 11px
 }
 .search .material-icons-outlined{color:var(--muted);font-size:20px}
 .search input{width:100%;height:42px;border:0;background:transparent;color:var(--text);outline:0}
@@ -98,99 +126,111 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .result-count{font-size:12px;color:var(--muted)}
 .quick-actions{display:flex;gap:7px}
 
-/* Form */
 .form-wrap{display:none;margin-bottom:18px}
 .form-card{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    box-shadow:var(--shadow);padding:18px
+background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+box-shadow:var(--shadow);padding:18px
 }
 .form-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.form-title{display:flex;align-items:center;gap:9px}.form-title h3{font-size:17px}.form-title .material-icons-outlined{color:var(--primary)}
+.form-title{display:flex;align-items:center;gap:9px}.form-title h3{font-size:17px}
+.form-title .material-icons-outlined{color:var(--primary)}
 .fields{display:flex;flex-direction:column;gap:9px}
 .field-row{display:grid;grid-template-columns:1fr 1.5fr 42px;gap:8px}
 .input{
-    width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
-    border-radius:9px;padding:11px 12px;outline:0
+width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+border-radius:9px;padding:11px 12px;outline:0
 }
 .input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
 .remove-field{border-radius:9px;background:var(--danger-soft);color:var(--danger);cursor:pointer}
 .form-actions{display:flex;gap:9px;margin-top:13px}.form-actions>*{flex:1}
 
-/* Cards */
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .card{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    box-shadow:var(--shadow);padding:16px;animation:appear .25s ease
+background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+box-shadow:var(--shadow);padding:16px;animation:appear .25s ease
 }
 .card.locked{border-color:var(--border);background:linear-gradient(135deg,var(--surface),var(--surface-2))}
 .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
 .card-number{
-    display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--muted);
-    background:var(--surface-2);border:1px solid var(--border);padding:5px 8px;border-radius:20px
+display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--muted);
+background:var(--surface-2);border:1px solid var(--border);padding:5px 8px;border-radius:20px
 }
 .badge{font-size:10px;font-weight:700;padding:5px 8px;border-radius:20px}
 .badge.locked{color:var(--amber);background:var(--amber-soft)}
 .badge.open{color:var(--primary);background:var(--primary-soft)}
 .info-row{
-    display:grid;grid-template-columns:minmax(80px,38%) 1fr;gap:10px;padding:10px 0;
-    border-bottom:1px dashed var(--border);font-size:13px
+display:grid;grid-template-columns:minmax(80px,38%) 1fr;gap:10px;padding:10px 0;
+border-bottom:1px dashed var(--border);font-size:13px
 }
 .info-row:last-child{border-bottom:0}
 .info-label{color:var(--muted);font-weight:700;word-break:break-word}
 .info-value{color:var(--text);word-break:break-word;line-height:1.45}
-.card-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--border);margin-top:10px;padding-top:11px}
+.card-actions{
+display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border-top:1px solid var(--border);
+margin-top:10px;padding-top:11px
+}
 .action{
-    min-height:36px;border-radius:8px;background:var(--surface-2);color:var(--muted);cursor:pointer;
-    display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:700
+min-height:36px;border-radius:8px;background:var(--surface-2);color:var(--muted);cursor:pointer;
+display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:700
 }
 .action:hover{color:var(--text);border-color:var(--border)}
 .action .material-icons-outlined{font-size:17px}
-.action.edit{color:var(--blue)}.action.delete{color:var(--danger)}.action.lock{color:var(--amber)}
-.action.copy{color:var(--primary)}
+.action.edit{color:var(--blue)}.action.delete{color:var(--danger)}
+.action.lock{color:var(--amber)}.action.copy{color:var(--primary)}
 .locked .action.edit,.locked .action.delete{opacity:.45}
 
-/* Empty/loading */
 .empty{text-align:center;padding:55px 20px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius)}
-.empty .material-icons-outlined{font-size:52px;color:var(--muted);opacity:.5}.empty h3{margin:10px 0 5px}.empty p{color:var(--muted);font-size:13px}
+.empty .material-icons-outlined{font-size:52px;color:var(--muted);opacity:.5}
+.empty h3{margin:10px 0 5px}.empty p{color:var(--muted);font-size:13px}
 .loader{display:none;grid-template-columns:repeat(2,1fr);gap:14px}
-.skeleton{height:210px;border-radius:var(--radius);background:linear-gradient(90deg,var(--surface-2) 25%,var(--border) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:loading 1.3s infinite}
+.skeleton{
+height:210px;border-radius:var(--radius);
+background:linear-gradient(90deg,var(--surface-2) 25%,var(--border) 50%,var(--surface-2) 75%);
+background-size:200% 100%;animation:loading 1.3s infinite
+}
 
-/* Modal */
-.overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,6,23,.58);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px}
-.modal{width:100%;max-width:390px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 25px 70px rgba(0,0,0,.25);animation:appear .2s ease}
+.overlay{
+display:none;position:fixed;inset:0;z-index:100;background:rgba(2,6,23,.58);
+backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px
+}
+.modal{
+width:100%;max-width:390px;background:var(--surface);border:1px solid var(--border);
+border-radius:18px;padding:20px;box-shadow:0 25px 70px rgba(0,0,0,.25);animation:appear .2s ease
+}
 .modal h3{margin-bottom:7px}.modal p{color:var(--muted);font-size:13px;line-height:1.5}
 .modal-actions{display:flex;gap:9px;margin-top:20px}.modal-actions button{flex:1}
 
-/* Toast */
-.toast-box{position:fixed;right:20px;bottom:20px;z-index:200;display:flex;flex-direction:column;gap:8px;max-width:min(380px,calc(100vw - 40px))}
-.toast{display:flex;align-items:center;gap:8px;background:#0f172a;color:white;padding:11px 14px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:13px;animation:toastIn .25s ease}
+.toast-box{
+position:fixed;right:20px;bottom:20px;z-index:200;display:flex;flex-direction:column;
+gap:8px;max-width:min(380px,calc(100vw - 40px))
+}
+.toast{
+display:flex;align-items:center;gap:8px;background:#0f172a;color:#fff;padding:11px 14px;
+border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:13px;animation:toastIn .25s ease
+}
 .toast.success{background:#166534}.toast.error{background:#b91c1c}.toast.info{background:#1e3a8a}
 
-/* Compact mode */
 [data-view="compact"] .cards{grid-template-columns:1fr}
 [data-view="compact"] .card{padding:12px}
 [data-view="compact"] .info-row:not(:first-of-type){display:none}
 
-/* Responsive */
 @media(max-width:800px){
-    .stats{grid-template-columns:repeat(2,1fr)}
-    .cards,.loader{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,1fr)}
+.cards,.loader{grid-template-columns:1fr}
 }
 @media(max-width:600px){
-    .main{padding:14px}.header{padding:12px 14px}
-    .hero{align-items:stretch;flex-direction:column}.hero h2{font-size:22px}
-    .toolbar-row{flex-wrap:wrap}.search{width:100%;flex-basis:100%}.select-wrap{flex:1}
-    .select-wrap select{width:100%;min-width:0}.toolbar-row>.primary-btn{flex:1}
-    .field-row{grid-template-columns:1fr 1fr 40px}
-    .card-actions{grid-template-columns:repeat(2,1fr)}
+.main{padding:14px}.header{padding:12px 14px}
+.hero{align-items:stretch;flex-direction:column}.hero h2{font-size:22px}
+.toolbar-row{flex-wrap:wrap}.search{width:100%;flex-basis:100%}
+.select-wrap{flex:1}.select-wrap select{width:100%;min-width:0}
+.toolbar-row>.primary-btn{flex:1}.field-row{grid-template-columns:1fr 1fr 40px}
+.card-actions{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:390px){
-    .stats{gap:8px}.stat{padding:11px}.stat strong{font-size:18px}
-    .field-row{grid-template-columns:1fr}
-    .remove-field{height:38px}
+.stats{gap:8px}.stat{padding:11px}.stat strong{font-size:18px}
+.field-row{grid-template-columns:1fr}.remove-field{height:38px}
 }
 
-/* Animations */
 @keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -199,516 +239,773 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </head>
 
 <body data-theme="light" data-view="expanded">
-<div class="app">
+
+<div id="loginScreen">
+<div class="login-box">
+<div class="login-logo"><span class="material-icons-outlined">lock</span></div>
+<h1>DataCards Pro</h1>
+<p>Sign in to access your database</p>
+
+<div class="login-error" id="loginError">Invalid User ID or Password</div>
+
+<div class="login-field">
+<label for="loginUser">User ID</label>
+<input class="login-input" id="loginUser" type="text" autocomplete="username" placeholder="Enter User ID">
+</div>
+
+<div class="login-field">
+<label for="loginPassword">Password</label>
+<input class="login-input" id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter Password">
+</div>
+
+<button class="login-button" id="loginButton" onclick="login()">
+<span class="material-icons-outlined">login</span>
+Sign In
+</button>
+
+<div class="login-status">Authorized access only</div>
+</div>
+</div>
+
+<div class="app" id="app">
 
 <header class="header">
-    <div class="brand">
-        <div class="brand-icon"><span class="material-icons-outlined">database</span></div>
-        <div><h1>DataCards</h1><small>Smart record manager</small></div>
-    </div>
-    <div class="header-actions">
-        <button class="icon-btn" onclick="refreshData()" title="Refresh"><span class="material-icons-outlined" id="refreshIcon">refresh</span></button>
-        <button class="icon-btn" onclick="toggleView()" title="Toggle view"><span class="material-icons-outlined" id="viewIcon">view_agenda</span></button>
-        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><span class="material-icons-outlined" id="themeIcon">dark_mode</span></button>
-    </div>
+<div class="brand">
+<div class="brand-icon"><span class="material-icons-outlined">database</span></div>
+<div><h1>DataCards</h1><small>Smart record manager</small></div>
+</div>
+<div class="header-actions">
+<button class="icon-btn" onclick="refreshData()" title="Refresh"><span class="material-icons-outlined" id="refreshIcon">refresh</span></button>
+<button class="icon-btn" onclick="toggleView()" title="Toggle view"><span class="material-icons-outlined" id="viewIcon">view_agenda</span></button>
+<button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><span class="material-icons-outlined" id="themeIcon">dark_mode</span></button>
+<button class="icon-btn" onclick="logout()" title="Logout"><span class="material-icons-outlined">logout</span></button>
+</div>
 </header>
 
 <main class="main">
-    <section class="hero">
-        <div><h2>Your Database</h2><p>Create, search, edit and organize your records easily.</p></div>
-        <button class="primary-btn" onclick="openCreateForm()"><span class="material-icons-outlined">add</span>New Card</button>
-    </section>
 
-    <section class="stats">
-        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">style</span></div><div><strong id="statTotal">0</strong><span>Total Cards</span></div></div>
-        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">lock</span></div><div><strong id="statLocked">0</strong><span>Locked</span></div></div>
-        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">label</span></div><div><strong id="statFields">0</strong><span>Total Fields</span></div></div>
-        <div class="stat"><div class="stat-icon"><span class="material-icons-outlined">search</span></div><div><strong id="statVisible">0</strong><span>Visible</span></div></div>
-    </section>
+<section class="hero">
+<div><h2>Your Database</h2><p>Create, search, edit and organize your records easily.</p></div>
+<button class="primary-btn" onclick="openCreateForm()"><span class="material-icons-outlined">add</span>New Card</button>
+</section>
 
-    <section class="toolbar">
-        <div class="toolbar-row">
-            <label class="search">
-                <span class="material-icons-outlined">search</span>
-                <input id="searchInput" type="search" placeholder="Search cards, labels or values..." oninput="applyFilters()">
-            </label>
-            <div class="select-wrap">
-                <span class="material-icons-outlined">filter_alt</span>
-                <select id="fieldFilter" onchange="applyFilters()"><option value="">All Fields</option></select>
-            </div>
-            <button class="secondary-btn" onclick="clearFilters()" title="Clear filters"><span class="material-icons-outlined">filter_alt_off</span></button>
-        </div>
-        <div class="toolbar-bottom">
-            <span class="result-count" id="resultCount">0 records</span>
-            <div class="quick-actions">
-                <button class="secondary-btn" onclick="exportJSON()"><span class="material-icons-outlined">download</span>Export</button>
-                <button class="secondary-btn" onclick="document.getElementById('importFile').click()"><span class="material-icons-outlined">upload</span>Import</button>
-                <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
-            </div>
-        </div>
-    </section>
+<section class="stats">
+<div class="stat"><div class="stat-icon"><span class="material-icons-outlined">style</span></div><div><strong id="statTotal">0</strong><span>Total Cards</span></div></div>
+<div class="stat"><div class="stat-icon"><span class="material-icons-outlined">lock</span></div><div><strong id="statLocked">0</strong><span>Locked</span></div></div>
+<div class="stat"><div class="stat-icon"><span class="material-icons-outlined">label</span></div><div><strong id="statFields">0</strong><span>Total Fields</span></div></div>
+<div class="stat"><div class="stat-icon"><span class="material-icons-outlined">search</span></div><div><strong id="statVisible">0</strong><span>Visible</span></div></div>
+</section>
 
-    <section class="form-wrap" id="formWrap">
-        <div class="form-card">
-            <div class="form-head">
-                <div class="form-title">
-                    <span class="material-icons-outlined" id="formIcon">post_add</span>
-                    <h3 id="formTitle">Create Card</h3>
-                </div>
-                <button class="icon-btn" onclick="closeForm()"><span class="material-icons-outlined">close</span></button>
-            </div>
-            <div class="fields" id="fieldsContainer"></div>
-            <button class="secondary-btn" style="width:100%;margin-top:10px;color:var(--primary);border-style:dashed" onclick="addFieldRow()">
-                <span class="material-icons-outlined">add_circle_outline</span>Add Field
-            </button>
-            <div class="form-actions">
-                <button class="secondary-btn" onclick="closeForm()">Cancel</button>
-                <button class="primary-btn" id="submitBtn" onclick="saveCard()"><span class="material-icons-outlined" id="submitIcon">save</span><span id="submitText">Save Card</span></button>
-            </div>
-        </div>
-    </section>
+<section class="toolbar">
+<div class="toolbar-row">
+<label class="search">
+<span class="material-icons-outlined">search</span>
+<input id="searchInput" type="search" placeholder="Search cards, labels or values..." oninput="applyFilters()">
+</label>
+<div class="select-wrap">
+<span class="material-icons-outlined">filter_alt</span>
+<select id="fieldFilter" onchange="applyFilters()"><option value="">All Fields</option></select>
+</div>
+<button class="secondary-btn" onclick="clearFilters()" title="Clear filters"><span class="material-icons-outlined">filter_alt_off</span></button>
+</div>
 
-    <section class="loader" id="loader">
-        <div class="skeleton"></div><div class="skeleton"></div>
-        <div class="skeleton"></div><div class="skeleton"></div>
-    </section>
+<div class="toolbar-bottom">
+<span class="result-count" id="resultCount">0 records</span>
+<div class="quick-actions">
+<button class="secondary-btn" onclick="exportJSON()"><span class="material-icons-outlined">download</span>Export</button>
+<button class="secondary-btn" onclick="document.getElementById('importFile').click()"><span class="material-icons-outlined">upload</span>Import</button>
+<input id="importFile" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
+</div>
+</div>
+</section>
 
-    <section class="cards" id="cards"></section>
+<section class="form-wrap" id="formWrap">
+<div class="form-card">
+<div class="form-head">
+<div class="form-title">
+<span class="material-icons-outlined" id="formIcon">post_add</span>
+<h3 id="formTitle">Create Card</h3>
+</div>
+<button class="icon-btn" onclick="closeForm()"><span class="material-icons-outlined">close</span></button>
+</div>
+
+<div class="fields" id="fieldsContainer"></div>
+
+<button class="secondary-btn" style="width:100%;margin-top:10px;color:var(--primary);border-style:dashed" onclick="addFieldRow()">
+<span class="material-icons-outlined">add_circle_outline</span>Add Field
+</button>
+
+<div class="form-actions">
+<button class="secondary-btn" onclick="closeForm()">Cancel</button>
+<button class="primary-btn" id="submitBtn" onclick="saveCard">
+<span class="material-icons-outlined" id="submitIcon">save</span>
+<span id="submitText">Save Card</span>
+</button>
+</div>
+</div>
+</section>
+
+<section class="loader" id="loader">
+<div class="skeleton"></div><div class="skeleton"></div>
+<div class="skeleton"></div><div class="skeleton"></div>
+</section>
+
+<section class="cards" id="cards"></section>
+
 </main>
 
 <div class="overlay" id="confirmOverlay">
-    <div class="modal">
-        <h3 id="confirmTitle">Delete Card?</h3>
-        <p id="confirmText">This action cannot be undone.</p>
-        <div class="modal-actions">
-            <button class="secondary-btn" onclick="closeConfirm()">Cancel</button>
-            <button class="primary-btn" style="background:var(--danger)" id="confirmBtn">Delete</button>
-        </div>
-    </div>
+<div class="modal">
+<h3 id="confirmTitle">Delete Card?</h3>
+<p id="confirmText">This action cannot be undone.</p>
+<div class="modal-actions">
+<button class="secondary-btn" onclick="closeConfirm()">Cancel</button>
+<button class="primary-btn" style="background:var(--danger)" id="confirmBtn">Delete</button>
+</div>
+</div>
 </div>
 
 <div class="overlay" id="detailOverlay">
-    <div class="modal" style="max-height:85vh;overflow:auto">
-        <div class="form-head"><div class="form-title"><span class="material-icons-outlined">visibility</span><h3>Card Details</h3></div><button class="icon-btn" onclick="closeDetail()"><span class="material-icons-outlined">close</span></button></div>
-        <div id="detailContent"></div>
-    </div>
+<div class="modal" style="max-height:85vh;overflow:auto">
+<div class="form-head">
+<div class="form-title"><span class="material-icons-outlined">visibility</span><h3>Card Details</h3></div>
+<button class="icon-btn" onclick="closeDetail()"><span class="material-icons-outlined">close</span></button>
+</div>
+<div id="detailContent"></div>
+</div>
 </div>
 
 <div class="toast-box" id="toastBox"></div>
 </div>
 
 <script>
-/* =========================================================
-   DataCards Pro
-   Google Apps Script API preserved from the original project
-   ========================================================= */
-const API_URL = "https://script.google.com/macros/s/AKfycbzt8wTvmU-E1sbcmPB95z4HXWLKkiaQBjc-IukAehmmBgfkMyLZ5UhPvrUi-ct26tNhcA/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbzt8wTvmU-E1sbcmPB95z4HXWLKkiaQBjc-IukAehmmBgfkMyLZ5UhPvrUi-ct26tNhcA/exec";
 
-let appData = [];
-let currentEditId = null;
-let confirmCallback = null;
+const AUTH_USER="@urstrulyrangaswamy";
+const AUTH_HASH="MjM0MzgtQ00tMDY5";
 
-/* ---------- Init ---------- */
-window.addEventListener("DOMContentLoaded", () => {
-    initPreferences();
-    initEmptyForm();
-    fetchData();
+let appData=[];
+let currentEditId=null;
+let confirmCallback=null;
+
+window.addEventListener("DOMContentLoaded",()=>{
+initPreferences();
+initEmptyForm();
+checkSession();
+});
+
+function checkSession(){
+if(sessionStorage.getItem("dc-auth")==="1"){
+showApp();
+}else{
+document.getElementById("loginScreen").style.display="flex";
+document.getElementById("app").style.display="none";
+}
+}
+
+function encodePassword(value){
+return btoa(unescape(encodeURIComponent(value)));
+}
+
+function login(){
+const user=document.getElementById("loginUser").value.trim();
+const password=document.getElementById("loginPassword").value;
+const error=document.getElementById("loginError");
+const button=document.getElementById("loginButton");
+
+if(user===AUTH_USER && encodePassword(password)===AUTH_HASH){
+sessionStorage.setItem("dc-auth","1");
+error.style.display="none";
+button.disabled=true;
+button.innerHTML='<span class="material-icons-outlined">check</span>Access Granted';
+setTimeout(()=>{
+showApp();
+button.disabled=false;
+button.innerHTML='<span class="material-icons-outlined">login</span>Sign In';
+},250);
+}else{
+error.textContent="Invalid User ID or Password";
+error.style.display="block";
+document.getElementById("loginPassword").value="";
+}
+}
+
+function logout(){
+sessionStorage.removeItem("dc-auth");
+document.getElementById("app").style.display="none";
+document.getElementById("loginScreen").style.display="flex";
+document.getElementById("loginUser").value="";
+document.getElementById("loginPassword").value="";
+}
+
+function showApp(){
+document.getElementById("loginScreen").style.display="none";
+document.getElementById("app").style.display="block";
+fetchData();
+}
+
+document.getElementById("loginPassword").addEventListener("keydown",e=>{
+if(e.key==="Enter")login();
+});
+
+document.getElementById("loginUser").addEventListener("keydown",e=>{
+if(e.key==="Enter")document.getElementById("loginPassword").focus();
 });
 
 function initPreferences(){
-    const theme = localStorage.getItem("dc-theme") || "light";
-    const view = localStorage.getItem("dc-view") || "expanded";
-    document.body.dataset.theme = theme;
-    document.body.dataset.view = view;
-    updateThemeIcon();
-    updateViewIcon();
+const theme=localStorage.getItem("dc-theme")||"light";
+const view=localStorage.getItem("dc-view")||"expanded";
+document.body.dataset.theme=theme;
+document.body.dataset.view=view;
+updateThemeIcon();
+updateViewIcon();
 }
 
-/* ---------- Theme / View ---------- */
 function toggleTheme(){
-    const next = document.body.dataset.theme === "dark" ? "light" : "dark";
-    document.body.dataset.theme = next;
-    localStorage.setItem("dc-theme", next);
-    updateThemeIcon();
-    showToast(next === "dark" ? "Dark mode enabled" : "Light mode enabled", "info");
+const next=document.body.dataset.theme==="dark"?"light":"dark";
+document.body.dataset.theme=next;
+localStorage.setItem("dc-theme",next);
+updateThemeIcon();
+showToast(next==="dark"?"Dark mode enabled":"Light mode enabled","info");
 }
+
 function updateThemeIcon(){
-    document.getElementById("themeIcon").textContent =
-        document.body.dataset.theme === "dark" ? "light_mode" : "dark_mode";
+document.getElementById("themeIcon").textContent=
+document.body.dataset.theme==="dark"?"light_mode":"dark_mode";
 }
+
 function toggleView(){
-    const next = document.body.dataset.view === "compact" ? "expanded" : "compact";
-    document.body.dataset.view = next;
-    localStorage.setItem("dc-view", next);
-    updateViewIcon();
+const next=document.body.dataset.view==="compact"?"expanded":"compact";
+document.body.dataset.view=next;
+localStorage.setItem("dc-view",next);
+updateViewIcon();
 }
+
 function updateViewIcon(){
-    document.getElementById("viewIcon").textContent =
-        document.body.dataset.view === "compact" ? "format_list_bulleted" : "view_agenda";
+document.getElementById("viewIcon").textContent=
+document.body.dataset.view==="compact"?"format_list_bulleted":"view_agenda";
 }
 
-/* ---------- Helpers ---------- */
 function escapeHTML(value){
-    return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[char]));
-}
-function safeId(value){ return String(value ?? "").replace(/[^a-zA-Z0-9_-]/g,""); }
-function showToast(message,type="info"){
-    const box=document.getElementById("toastBox");
-    const toast=document.createElement("div");
-    toast.className=`toast ${type}`;
-    const icon=type==="success"?"check_circle":type==="error"?"error_outline":"info";
-    toast.innerHTML=`<span class="material-icons-outlined">${icon}</span><span>${escapeHTML(message)}</span>`;
-    box.appendChild(toast);
-    setTimeout(()=>toast.remove(),3200);
+return String(value??"").replace(/[&<>"']/g,char=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+}[char]));
 }
 
-/* ---------- Confirm ---------- */
+function safeId(value){
+return String(value??"").replace(/[^a-zA-Z0-9_-]/g,"");
+}
+
+function showToast(message,type="info"){
+const box=document.getElementById("toastBox");
+const toast=document.createElement("div");
+toast.className=`toast ${type}`;
+const icon=type==="success"?"check_circle":type==="error"?"error_outline":"info";
+toast.innerHTML=`<span class="material-icons-outlined">${icon}</span><span>${escapeHTML(message)}</span>`;
+box.appendChild(toast);
+setTimeout(()=>toast.remove(),3200);
+}
+
 function openConfirm(title,text,callback){
-    document.getElementById("confirmTitle").textContent=title;
-    document.getElementById("confirmText").textContent=text;
-    confirmCallback=callback;
-    document.getElementById("confirmOverlay").style.display="flex";
+document.getElementById("confirmTitle").textContent=title;
+document.getElementById("confirmText").textContent=text;
+confirmCallback=callback;
+document.getElementById("confirmOverlay").style.display="flex";
 }
+
 function closeConfirm(){
-    document.getElementById("confirmOverlay").style.display="none";
-    confirmCallback=null;
+document.getElementById("confirmOverlay").style.display="none";
+confirmCallback=null;
 }
+
 document.getElementById("confirmBtn").addEventListener("click",async()=>{
-    if(confirmCallback){
-        const cb=confirmCallback;
-        closeConfirm();
-        await cb();
-    }
+if(confirmCallback){
+const cb=confirmCallback;
+closeConfirm();
+await cb();
+}
 });
 
-/* ---------- API ---------- */
 async function fetchData(){
-    if(!API_URL || API_URL.includes("YOUR_WEB_APP_URL")){
-        showToast("API URL is missing.","error"); return;
-    }
-    const loader=document.getElementById("loader");
-    const cards=document.getElementById("cards");
-    loader.style.display="grid";
-    cards.innerHTML="";
-    try{
-        const response=await fetch(API_URL,{cache:"no-store"});
-        if(!response.ok) throw new Error("HTTP "+response.status);
-        const result=await response.json();
-        if(!result.success) throw new Error(result.error || "Backend error");
-        appData=Array.isArray(result.cards)?result.cards:[];
-        normalizeData();
-        render();
-        showToast("Data refreshed","success");
-    }catch(error){
-        console.error(error);
-        showToast("Could not load data. Check your API connection.","error");
-        render();
-    }finally{
-        loader.style.display="none";
-    }
+if(!API_URL||API_URL.includes("YOUR_WEB_APP_URL")){
+showToast("API URL is missing.","error");
+return;
 }
+
+const loader=document.getElementById("loader");
+const cards=document.getElementById("cards");
+loader.style.display="grid";
+cards.innerHTML="";
+
+try{
+const response=await fetch(API_URL,{cache:"no-store"});
+if(!response.ok)throw new Error("HTTP "+response.status);
+const result=await response.json();
+if(!result.success)throw new Error(result.error||"Backend error");
+appData=Array.isArray(result.cards)?result.cards:[];
+normalizeData();
+render();
+showToast("Data refreshed","success");
+}catch(error){
+console.error(error);
+showToast("Could not load data. Check your API connection.","error");
+render();
+}finally{
+loader.style.display="none";
+}
+}
+
 function refreshData(){
-    const icon=document.getElementById("refreshIcon");
-    icon.classList.add("spin");
-    fetchData().finally(()=>setTimeout(()=>icon.classList.remove("spin"),500));
+const icon=document.getElementById("refreshIcon");
+icon.classList.add("spin");
+fetchData().finally(()=>setTimeout(()=>icon.classList.remove("spin"),500));
 }
+
 function normalizeData(){
-    appData=appData.map(card=>({
-        id:card.id ?? crypto.randomUUID(),
-        locked:Boolean(card.locked),
-        cardData:Array.isArray(card.cardData)?card.cardData.map(f=>({
-            name:String(f?.name ?? "Untitled"),
-            value:String(f?.value ?? "-")
-        })):[]
-    }));
+appData=appData.map(card=>({
+id:card.id??crypto.randomUUID(),
+locked:Boolean(card.locked),
+cardData:Array.isArray(card.cardData)?card.cardData.map(f=>({
+name:String(f?.name??"Untitled"),
+value:String(f?.value??"-")
+})):[]
+}));
 }
 
-/* ---------- Render ---------- */
 function render(){
-    renderStats();
-    updateFilterDropdown();
-    renderCards();
-    applyFilters();
+renderStats();
+updateFilterDropdown();
+renderCards();
+applyFilters();
 }
+
 function renderStats(){
-    const total=appData.length;
-    const locked=appData.filter(c=>c.locked).length;
-    const fields=appData.reduce((sum,c)=>sum+c.cardData.length,0);
-    document.getElementById("statTotal").textContent=total;
-    document.getElementById("statLocked").textContent=locked;
-    document.getElementById("statFields").textContent=fields;
+const total=appData.length;
+const locked=appData.filter(c=>c.locked).length;
+const fields=appData.reduce((sum,c)=>sum+c.cardData.length,0);
+document.getElementById("statTotal").textContent=total;
+document.getElementById("statLocked").textContent=locked;
+document.getElementById("statFields").textContent=fields;
 }
+
 function renderCards(){
-    const container=document.getElementById("cards");
-    if(!appData.length){
-        container.innerHTML=`
-            <div class="empty" style="grid-column:1/-1">
-                <span class="material-icons-outlined">inventory_2</span>
-                <h3>No cards yet</h3>
-                <p>Create your first record to get started.</p>
-                <button class="primary-btn" style="margin-top:15px" onclick="openCreateForm()"><span class="material-icons-outlined">add</span>Create Card</button>
-            </div>`;
-        document.getElementById("resultCount").textContent="0 records";
-        return;
-    }
+const container=document.getElementById("cards");
 
-    container.innerHTML=appData.map((card,index)=>{
-        const locked=card.locked;
-        const rows=card.cardData.map(field=>`
-            <div class="info-row">
-                <div class="info-label">${escapeHTML(field.name)}</div>
-                <div class="info-value">${escapeHTML(field.value)}</div>
-            </div>`).join("");
-
-        return `
-        <article class="card ${locked?"locked":""}" data-id="${escapeHTML(card.id)}"
-                 data-search="${escapeHTML(JSON.stringify(card.cardData).toLowerCase())}">
-            <div class="card-top">
-                <span class="card-number"><span class="material-icons-outlined" style="font-size:15px">credit_card</span>Card ${index+1}</span>
-                <span class="badge ${locked?"locked":"open"}">
-                    ${locked?"🔒 Locked":"● Active"}
-                </span>
-            </div>
-            <div class="card-body">${rows || `<div class="info-row"><div class="info-value">No fields</div></div>`}</div>
-            <div class="card-actions">
-                <button class="action" onclick="viewCard('${safeId(card.id)}')"><span class="material-icons-outlined">visibility</span>View</button>
-                <button class="action copy" onclick="copyCard('${safeId(card.id)}')"><span class="material-icons-outlined">content_copy</span>Copy</button>
-                <button class="action lock" onclick="toggleLock('${safeId(card.id)}',${locked},this)"><span class="material-icons-outlined">${locked?"lock_open":"lock"}</span>${locked?"Unlock":"Lock"}</button>
-                <button class="action edit" onclick="editCard('${safeId(card.id)}')" ${locked?"disabled":""}><span class="material-icons-outlined">edit</span>Edit</button>
-                <button class="action delete" style="grid-column:span 4" onclick="deleteCard('${safeId(card.id)}',this)" ${locked?"disabled":""}><span class="material-icons-outlined">delete_outline</span>Remove</button>
-            </div>
-        </article>`;
-    }).join("");
+if(!appData.length){
+container.innerHTML=`
+<div class="empty" style="grid-column:1/-1">
+<span class="material-icons-outlined">inventory_2</span>
+<h3>No cards yet</h3>
+<p>Create your first record to get started.</p>
+<button class="primary-btn" style="margin-top:15px" onclick="openCreateForm()">
+<span class="material-icons-outlined">add</span>Create Card
+</button>
+</div>`;
+document.getElementById("resultCount").textContent="0 records";
+return;
 }
+
+container.innerHTML=appData.map((card,index)=>{
+const locked=card.locked;
+
+const rows=card.cardData.map(field=>`
+<div class="info-row">
+<div class="info-label">${escapeHTML(field.name)}</div>
+<div class="info-value">${escapeHTML(field.value)}</div>
+</div>`).join("");
+
+return`
+<article class="card ${locked?"locked":""}" data-id="${escapeHTML(card.id)}">
+<div class="card-top">
+<span class="card-number">
+<span class="material-icons-outlined" style="font-size:15px">credit_card</span>
+Card ${index+1}
+</span>
+<span class="badge ${locked?"locked":"open"}">${locked?"🔒 Locked":"● Active"}</span>
+</div>
+
+<div class="card-body">
+${rows||`<div class="info-row"><div class="info-value">No fields</div></div>`}
+</div>
+
+<div class="card-actions">
+<button class="action" onclick="viewCard('${safeId(card.id)}')">
+<span class="material-icons-outlined">visibility</span>View
+</button>
+
+<button class="action copy" onclick="copyCard('${safeId(card.id)}')">
+<span class="material-icons-outlined">content_copy</span>Copy
+</button>
+
+<button class="action lock" onclick="toggleLock('${safeId(card.id)}',${locked},this)">
+<span class="material-icons-outlined">${locked?"lock_open":"lock"}</span>
+${locked?"Unlock":"Lock"}
+</button>
+
+<button class="action edit" onclick="editCard('${safeId(card.id)}')" ${locked?"disabled":""}>
+<span class="material-icons-outlined">edit</span>Edit
+</button>
+
+<button class="action delete" style="grid-column:span 4" onclick="deleteCard('${safeId(card.id)}',this)" ${locked?"disabled":""}>
+<span class="material-icons-outlined">delete_outline</span>Remove
+</button>
+</div>
+</article>`;
+}).join("");
+}
+
 function updateFilterDropdown(){
-    const select=document.getElementById("fieldFilter");
-    const previous=select.value;
-    const labels=[...new Set(appData.flatMap(c=>c.cardData.map(f=>f.name).filter(Boolean)))].sort((a,b)=>a.localeCompare(b));
-    select.innerHTML='<option value="">All Fields</option>'+labels.map(label=>`<option value="${escapeHTML(label)}">${escapeHTML(label)}</option>`).join("");
-    if(labels.includes(previous)) select.value=previous;
+const select=document.getElementById("fieldFilter");
+const previous=select.value;
+
+const labels=[
+...new Set(
+appData.flatMap(c=>c.cardData.map(f=>f.name).filter(Boolean))
+)
+].sort((a,b)=>a.localeCompare(b));
+
+select.innerHTML='<option value="">All Fields</option>'+
+labels.map(label=>`<option value="${escapeHTML(label)}">${escapeHTML(label)}</option>`).join("");
+
+if(labels.includes(previous))select.value=previous;
 }
 
-/* ---------- Search / Filter ---------- */
 function applyFilters(){
-    const query=document.getElementById("searchInput").value.trim().toLowerCase();
-    const field=document.getElementById("fieldFilter").value;
-    const cards=[...document.querySelectorAll("#cards .card")];
-    let visible=0;
+const query=document.getElementById("searchInput").value.trim().toLowerCase();
+const field=document.getElementById("fieldFilter").value;
+const cards=[...document.querySelectorAll("#cards .card")];
+let visible=0;
 
-    cards.forEach(el=>{
-        const id=el.dataset.id;
-        const card=appData.find(c=>String(c.id)===String(id));
-        if(!card)return;
-        const searchMatch=!query || JSON.stringify(card.cardData).toLowerCase().includes(query);
-        const fieldMatch=!field || card.cardData.some(f=>f.name===field);
-        const show=searchMatch && fieldMatch;
-        el.style.display=show?"block":"none";
-        if(show)visible++;
-    });
-    document.getElementById("statVisible").textContent=visible;
-    document.getElementById("resultCount").textContent=`${visible} record${visible===1?"":"s"}`;
+cards.forEach(el=>{
+const id=el.dataset.id;
+const card=appData.find(c=>String(c.id)===String(id));
+if(!card)return;
+
+const searchMatch=!query||JSON.stringify(card.cardData).toLowerCase().includes(query);
+const fieldMatch=!field||card.cardData.some(f=>f.name===field);
+const show=searchMatch&&fieldMatch;
+
+el.style.display=show?"block":"none";
+if(show)visible++;
+});
+
+document.getElementById("statVisible").textContent=visible;
+document.getElementById("resultCount").textContent=
+`${visible} record${visible===1?"":"s"}`;
 }
+
 function clearFilters(){
-    document.getElementById("searchInput").value="";
-    document.getElementById("fieldFilter").value="";
-    applyFilters();
+document.getElementById("searchInput").value="";
+document.getElementById("fieldFilter").value="";
+applyFilters();
 }
 
-/* ---------- Form ---------- */
 function openCreateForm(){
-    currentEditId=null;
-    document.getElementById("formTitle").textContent="Create Card";
-    document.getElementById("formIcon").textContent="post_add";
-    document.getElementById("submitText").textContent="Save Card";
-    document.getElementById("fieldsContainer").innerHTML="";
-    addFieldRow();
-    document.getElementById("formWrap").style.display="block";
-    document.getElementById("formWrap").scrollIntoView({behavior:"smooth",block:"start"});
+currentEditId=null;
+document.getElementById("formTitle").textContent="Create Card";
+document.getElementById("formIcon").textContent="post_add";
+document.getElementById("submitText").textContent="Save Card";
+document.getElementById("fieldsContainer").innerHTML="";
+addFieldRow();
+document.getElementById("formWrap").style.display="block";
+document.getElementById("formWrap").scrollIntoView({behavior:"smooth",block:"start"});
 }
+
 function closeForm(){
-    document.getElementById("formWrap").style.display="none";
-    currentEditId=null;
+document.getElementById("formWrap").style.display="none";
+currentEditId=null;
 }
+
 function initEmptyForm(){
-    document.getElementById("fieldsContainer").innerHTML="";
-    addFieldRow();
+document.getElementById("fieldsContainer").innerHTML="";
+addFieldRow();
 }
+
 function addFieldRow(name="",value=""){
-    const row=document.createElement("div");
-    row.className="field-row";
-    row.innerHTML=`
-        <input class="input field-name" type="text" placeholder="Label (e.g. Email)" value="${escapeHTML(name)}">
-        <input class="input field-value" type="text" placeholder="Value (e.g. example@email.com)" value="${escapeHTML(value)}">
-        <button class="remove-field" type="button" title="Remove field"><span class="material-icons-outlined">close</span></button>`;
-    row.querySelector(".remove-field").onclick=()=>row.remove();
-    document.getElementById("fieldsContainer").appendChild(row);
+const row=document.createElement("div");
+row.className="field-row";
+
+row.innerHTML=`
+<input class="input field-name" type="text" placeholder="Label (e.g. Email)" value="${escapeHTML(name)}">
+<input class="input field-value" type="text" placeholder="Value (e.g. example@email.com)" value="${escapeHTML(value)}">
+<button class="remove-field" type="button" title="Remove field">
+<span class="material-icons-outlined">close</span>
+</button>`;
+
+row.querySelector(".remove-field").onclick=()=>row.remove();
+document.getElementById("fieldsContainer").appendChild(row);
 }
+
 function editCard(id){
-    const card=appData.find(c=>String(c.id)===String(id));
-    if(!card)return;
-    if(card.locked){showToast("Unlock the card before editing.","error");return;}
-    currentEditId=card.id;
-    document.getElementById("formTitle").textContent="Edit Card";
-    document.getElementById("formIcon").textContent="edit_note";
-    document.getElementById("submitText").textContent="Update Card";
-    const container=document.getElementById("fieldsContainer");
-    container.innerHTML="";
-    card.cardData.forEach(f=>addFieldRow(f.name,f.value));
-    if(!card.cardData.length)addFieldRow();
-    document.getElementById("formWrap").style.display="block";
-    document.getElementById("formWrap").scrollIntoView({behavior:"smooth",block:"start"});
+const card=appData.find(c=>String(c.id)===String(id));
+if(!card)return;
+
+if(card.locked){
+showToast("Unlock the card before editing.","error");
+return;
 }
+
+currentEditId=card.id;
+document.getElementById("formTitle").textContent="Edit Card";
+document.getElementById("formIcon").textContent="edit_note";
+document.getElementById("submitText").textContent="Update Card";
+
+const container=document.getElementById("fieldsContainer");
+container.innerHTML="";
+
+card.cardData.forEach(f=>addFieldRow(f.name,f.value));
+
+if(!card.cardData.length)addFieldRow();
+
+document.getElementById("formWrap").style.display="block";
+document.getElementById("formWrap").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
 async function saveCard(){
-    const rows=[...document.querySelectorAll("#fieldsContainer .field-row")];
-    const cardData=rows.map(row=>({
-        name:row.querySelector(".field-name").value.trim() || "Untitled",
-        value:row.querySelector(".field-value").value.trim() || "-"
-    })).filter(f=>f.name!=="Untitled" || f.value!=="-");
+const rows=[...document.querySelectorAll("#fieldsContainer .field-row")];
 
-    if(!cardData.length){
-        showToast("Enter at least one field.","error");return;
-    }
+const cardData=rows.map(row=>({
+name:row.querySelector(".field-name").value.trim()||"Untitled",
+value:row.querySelector(".field-value").value.trim()||"-"
+})).filter(f=>f.name!=="Untitled"||f.value!=="-");
 
-    const button=document.getElementById("submitBtn");
-    const icon=document.getElementById("submitIcon");
-    button.disabled=true;icon.textContent="sync";icon.classList.add("spin");
-
-    const payload={action:currentEditId?"update":"create",cardData,id:currentEditId};
-    try{
-        const response=await fetch(API_URL,{
-            method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)
-        });
-        const result=await response.json();
-        if(!result.success)throw new Error(result.error||"Save failed");
-
-        if(currentEditId){
-            const i=appData.findIndex(c=>String(c.id)===String(currentEditId));
-            if(i>=0)appData[i].cardData=cardData;
-            showToast("Card updated successfully","success");
-        }else{
-            appData.push({id:result.id,cardData,locked:false});
-            showToast("Card created successfully","success");
-        }
-        closeForm();render();
-    }catch(error){
-        console.error(error);showToast(error.message||"Could not save card","error");
-    }finally{
-        button.disabled=false;icon.textContent="save";icon.classList.remove("spin");
-    }
+if(!cardData.length){
+showToast("Enter at least one field.","error");
+return;
 }
 
-/* ---------- Card Actions ---------- */
-function findCard(id){return appData.find(c=>String(c.id)===String(id));}
+const button=document.getElementById("submitBtn");
+const icon=document.getElementById("submitIcon");
+
+button.disabled=true;
+icon.textContent="sync";
+icon.classList.add("spin");
+
+const payload={
+action:currentEditId?"update":"create",
+cardData,
+id:currentEditId
+};
+
+try{
+const response=await fetch(API_URL,{
+method:"POST",
+headers:{"Content-Type":"text/plain;charset=utf-8"},
+body:JSON.stringify(payload)
+});
+
+const result=await response.json();
+
+if(!result.success)throw new Error(result.error||"Save failed");
+
+if(currentEditId){
+const i=appData.findIndex(c=>String(c.id)===String(currentEditId));
+if(i>=0)appData[i].cardData=cardData;
+showToast("Card updated successfully","success");
+}else{
+appData.push({
+id:result.id,
+cardData,
+locked:false
+});
+showToast("Card created successfully","success");
+}
+
+closeForm();
+render();
+
+}catch(error){
+console.error(error);
+showToast(error.message||"Could not save card","error");
+}finally{
+button.disabled=false;
+icon.textContent="save";
+icon.classList.remove("spin");
+}
+}
+
+function findCard(id){
+return appData.find(c=>String(c.id)===String(id));
+}
 
 async function deleteCard(id,button){
-    const card=findCard(id);
-    if(!card)return;
-    if(card.locked){showToast("Unlock the card before removing it.","error");return;}
+const card=findCard(id);
+if(!card)return;
 
-    openConfirm("Delete Card?","This record will be permanently removed from the database.",async()=>{
-        const original=button.innerHTML;
-        button.disabled=true;button.innerHTML='<span class="material-icons-outlined spin">sync</span>';
-        try{
-            const response=await fetch(API_URL,{
-                method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-                body:JSON.stringify({action:"delete",id})
-            });
-            const result=await response.json();
-            if(!result.success)throw new Error(result.error||"Delete failed");
-            appData=appData.filter(c=>String(c.id)!==String(id));
-            render();showToast("Card deleted","success");
-        }catch(error){
-            button.disabled=false;button.innerHTML=original;
-            showToast(error.message||"Could not delete card","error");
-        }
-    });
+if(card.locked){
+showToast("Unlock the card before removing it.","error");
+return;
+}
+
+openConfirm(
+"Delete Card?",
+"This record will be permanently removed from the database.",
+async()=>{
+const original=button.innerHTML;
+button.disabled=true;
+button.innerHTML='<span class="material-icons-outlined spin">sync</span>';
+
+try{
+const response=await fetch(API_URL,{
+method:"POST",
+headers:{"Content-Type":"text/plain;charset=utf-8"},
+body:JSON.stringify({action:"delete",id})
+});
+
+const result=await response.json();
+
+if(!result.success)throw new Error(result.error||"Delete failed");
+
+appData=appData.filter(c=>String(c.id)!==String(id));
+render();
+showToast("Card deleted","success");
+
+}catch(error){
+button.disabled=false;
+button.innerHTML=original;
+showToast(error.message||"Could not delete card","error");
+}
+});
 }
 
 async function toggleLock(id,current,button){
-    const newState=!current;
-    const original=button.innerHTML;
-    button.disabled=true;button.innerHTML='<span class="material-icons-outlined spin">sync</span>';
-    try{
-        const response=await fetch(API_URL,{
-            method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
-            body:JSON.stringify({action:"update",id,locked:newState})
-        });
-        const result=await response.json();
-        if(!result.success)throw new Error(result.error||"Lock update failed");
-        const card=findCard(id);
-        if(card)card.locked=newState;
-        render();showToast(newState?"Card locked":"Card unlocked","success");
-    }catch(error){
-        button.disabled=false;button.innerHTML=original;
-        showToast(error.message||"Could not update lock","error");
-    }
+const newState=!current;
+const original=button.innerHTML;
+
+button.disabled=true;
+button.innerHTML='<span class="material-icons-outlined spin">sync</span>';
+
+try{
+const response=await fetch(API_URL,{
+method:"POST",
+headers:{"Content-Type":"text/plain;charset=utf-8"},
+body:JSON.stringify({action:"update",id,locked:newState})
+});
+
+const result=await response.json();
+
+if(!result.success)throw new Error(result.error||"Lock update failed");
+
+const card=findCard(id);
+if(card)card.locked=newState;
+
+render();
+showToast(newState?"Card locked":"Card unlocked","success");
+
+}catch(error){
+button.disabled=false;
+button.innerHTML=original;
+showToast(error.message||"Could not update lock","error");
+}
 }
 
 function viewCard(id){
-    const card=findCard(id);
-    if(!card)return;
-    document.getElementById("detailContent").innerHTML=card.cardData.map(f=>`
-        <div class="info-row"><div class="info-label">${escapeHTML(f.name)}</div><div class="info-value">${escapeHTML(f.value)}</div></div>
-    `).join("") || "<p>No fields available.</p>";
-    document.getElementById("detailOverlay").style.display="flex";
+const card=findCard(id);
+if(!card)return;
+
+document.getElementById("detailContent").innerHTML=
+card.cardData.map(f=>`
+<div class="info-row">
+<div class="info-label">${escapeHTML(f.name)}</div>
+<div class="info-value">${escapeHTML(f.value)}</div>
+</div>
+`).join("")||"<p>No fields available.</p>";
+
+document.getElementById("detailOverlay").style.display="flex";
 }
-function closeDetail(){document.getElementById("detailOverlay").style.display="none"}
+
+function closeDetail(){
+document.getElementById("detailOverlay").style.display="none";
+}
 
 async function copyCard(id){
-    const card=findCard(id);
-    if(!card)return;
-    const text=card.cardData.map(f=>`${f.name}: ${f.value}`).join("\n");
-    try{
-        await navigator.clipboard.writeText(text);
-        showToast("Card copied to clipboard","success");
-    }catch{
-        showToast("Clipboard permission was denied","error");
-    }
+const card=findCard(id);
+if(!card)return;
+
+const text=card.cardData.map(f=>`${f.name}: ${f.value}`).join("\n");
+
+try{
+await navigator.clipboard.writeText(text);
+showToast("Card copied to clipboard","success");
+}catch{
+showToast("Clipboard permission was denied","error");
+}
 }
 
-/* ---------- Export / Import ---------- */
 function exportJSON(){
-    if(!appData.length){showToast("There is no data to export.","info");return;}
-    const blob=new Blob([JSON.stringify(appData,null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");
-    a.href=url;a.download=`datacards-backup-${new Date().toISOString().slice(0,10)}.json`;
-    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-    showToast("Backup exported","success");
-}
-function importJSON(event){
-    const file=event.target.files?.[0];
-    if(!file)return;
-    const reader=new FileReader();
-    reader.onload=()=>{
-        try{
-            const data=JSON.parse(reader.result);
-            if(!Array.isArray(data))throw new Error("Invalid backup format");
-            const valid=data.every(c=>c && Array.isArray(c.cardData));
-            if(!valid)throw new Error("Backup contains invalid records");
-            appData=data.map(c=>({
-                id:c.id ?? crypto.randomUUID(),locked:Boolean(c.locked),
-                cardData:c.cardData.map(f=>({name:String(f.name??"Untitled"),value:String(f.value??"-")}))
-            }));
-            render();
-            showToast("Backup loaded locally. Save records to sync with your server.","success");
-        }catch(error){showToast(error.message||"Invalid JSON backup","error")}
-        event.target.value="";
-    };
-    reader.readAsText(file);
+if(!appData.length){
+showToast("There is no data to export.","info");
+return;
 }
 
-/* ---------- Keyboard UX ---------- */
+const blob=new Blob([JSON.stringify(appData,null,2)],{
+type:"application/json"
+});
+
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+
+a.href=url;
+a.download=`datacards-backup-${new Date().toISOString().slice(0,10)}.json`;
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+URL.revokeObjectURL(url);
+showToast("Backup exported","success");
+}
+
+function importJSON(event){
+const file=event.target.files?.[0];
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=()=>{
+try{
+const data=JSON.parse(reader.result);
+
+if(!Array.isArray(data))throw new Error("Invalid backup format");
+
+const valid=data.every(c=>c&&Array.isArray(c.cardData));
+
+if(!valid)throw new Error("Backup contains invalid records");
+
+appData=data.map(c=>({
+id:c.id??crypto.randomUUID(),
+locked:Boolean(c.locked),
+cardData:c.cardData.map(f=>({
+name:String(f.name??"Untitled"),
+value:String(f.value??"-")
+}))
+}));
+
+render();
+showToast("Backup loaded locally. Save records to sync with your server.","success");
+
+}catch(error){
+showToast(error.message||"Invalid JSON backup","error");
+}
+
+event.target.value="";
+};
+
+reader.readAsText(file);
+}
+
 document.addEventListener("keydown",e=>{
-    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){
-        e.preventDefault();document.getElementById("searchInput").focus();
-    }
-    if(e.key==="Escape"){
-        closeConfirm();closeDetail();
-    }
+if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){
+e.preventDefault();
+document.getElementById("searchInput").focus();
+}
+
+if(e.key==="Escape"){
+closeConfirm();
+closeDetail();
+}
 });
 </script>
+
 </body>
 </html>
